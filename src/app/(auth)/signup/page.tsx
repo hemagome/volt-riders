@@ -18,12 +18,17 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 
 const FormSchema = z.object({
-  name: z.string().min(3, {
+  name: z.string({
+    required_error: "Nombre es requerido",
+  }).min(3, {
     message: "Nombre debe tener al menos 3 letras",
   }),
-  cc: z.number().min(8, {
+  cc: z.coerce.number({
+    required_error: "Documento es requerido",
+    invalid_type_error: "El documento debe ser numérico",
+  }).int().positive().gte(10000000, {
     message: "Cedula debe tener al menos 8 digitos",
-  }).max(10, {
+  }).lte(9999999999, {
     message: "Cedula no puede tener más de 10 digitos",
   }),
 })
