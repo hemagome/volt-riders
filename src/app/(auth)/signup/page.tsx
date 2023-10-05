@@ -18,8 +18,13 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  name: z.string().min(3, {
+    message: "Nombre debe tener al menos 3 letras",
+  }),
+  cc: z.number().min(8, {
+    message: "Cedula debe tener al menos 8 digitos",
+  }).max(10, {
+    message: "Cedula no puede tener más de 10 digitos",
   }),
 })
 
@@ -44,21 +49,37 @@ export default function Page() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Emilito" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name.
+                Este es el nombre
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <FormField
+          control={form.control}
+          name="cc"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cedula</FormLabel>
+              <FormControl>
+                <Input placeholder="1234567890" {...field} />
+              </FormControl>
+              <FormDescription>
+                Documento de identificación
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Enviar</Button>
       </form>
     </Form>
   )
