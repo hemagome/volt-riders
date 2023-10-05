@@ -1,8 +1,10 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <Link href="/signup">Registrarse</Link>
       <a
         href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
         target="_blank"
