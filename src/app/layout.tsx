@@ -1,8 +1,10 @@
-import './globals.css'
-import type { Metadata } from 'next'
+import './globals.css';
+import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/react';
-import { Inter } from 'next/font/google'
-import { ThemeProvider } from "@/components/theme-provider"
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { Navbar } from '@/components/navbar';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,15 +16,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <head />
+      <head/>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        ><Navbar/>
           {children}
+          <Toaster />
         </ThemeProvider>
         <Analytics />
       </body>

@@ -7,6 +7,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import es from 'date-fns/locale/es';
@@ -32,6 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
 const FormSchema = z.object({
@@ -72,6 +74,14 @@ const FormSchema = z.object({
   birthdate: z.date({
     required_error: "Fecha de nacimiento es requerida",
   }),
+  bio: z
+    .string()
+    .min(10, {
+      message: "Bio must be at least 10 characters.",
+    })
+    .max(160, {
+      message: "Bio must not be longer than 30 characters.",
+    }),
 });
 
 const locale = es;
@@ -242,6 +252,33 @@ export default function Page() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cómo te enteraste del club?</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Cuentanos un poco acerca de ti"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Puedes mencionar si alguien te referencio
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Checkbox id="terms" />
+          <label
+            htmlFor="terms"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          > Acepta términos y condiciones
+          </label>
+          <br></br>
           <Button type="submit">Enviar</Button>
         </form>
       </Form>
