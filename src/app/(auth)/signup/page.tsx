@@ -3,12 +3,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "@radix-ui/react-icons";
+import {
+  CalendarIcon,
+  CaretSortIcon,
+  CheckIcon
+} from "@radix-ui/react-icons";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import { format } from "date-fns";
 import es from 'date-fns/locale/es';
 import {
@@ -77,16 +87,139 @@ const FormSchema = z.object({
   bio: z
     .string()
     .min(10, {
-      message: "Bio must be at least 10 characters.",
+      message: "Información debe tener al menos 10 carácteres",
     })
     .max(160, {
-      message: "Bio must not be longer than 30 characters.",
+      message: "Información no debe tener más de 160 carácteres",
     }),
+  eps: z.string({
+    required_error: "Por favor seleccione una EPS",
+  }),
 });
 
 const locale = es;
 
+const epsList = [
+  {
+    value: "ESS024 - EPS042",
+    label: "COOSALUD EPS-S",
+  },
+  {
+    value: "EPS037 - EPSS41",
+    label: "NUEVA EPS",
+  },
+  {
+    value: "ESS207 - EPS048",
+    label: "MUTUAL SER",
+  },
+  {
+    value: "EPS001",
+    label: "ALIANSALUD EPS",
+  },
+  {
+    value: "EPS002",
+    label: "SALUD TOTAL EPS S.A",
+  },
+  {
+    value: "EPS005",
+    label: "EPS SANITAS",
+  },
+  {
+    value: "EPS010",
+    label: "EPS SURA",
+  },
+  {
+    value: "EPS017",
+    label: "FAMISANAR",
+  },
+  {
+    value: "EPS018",
+    label: "SERVICIO OCCIDENTAL DE SALUD EPS SOS",
+  },
+  {
+    value: "EPS046",
+    label: "SALUD MIA",
+  },
+  {
+    value: "EPS012",
+    label: "COMFENALCO VALLE",
+  },
+  {
+    value: "EPS008",
+    label: "COMPENSAR EPS",
+  },
+  {
+    value: "EAS016",
+    label: "EPM - EMPRESAS PUBLICAS DE MEDELLIN",
+  },
+  {
+    value: "EAS027",
+    label: "FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA",
+  },
+  {
+    value: "CCF055",
+    label: "CAJACOPI ATLANTICO",
+  },
+  {
+    value: "EPS025",
+    label: "CAPRESOCA",
+  },
+  {
+    value: "CCF102",
+    label: "COMFACHOCO",
+  },
+  {
+    value: "CCF050",
+    label: "COMFAORIENTE",
+  },
+  {
+    value: "CCF033",
+    label: "EPS FAMILIAR DE COLOMBIA",
+  },
+  {
+    value: "ESS062",
+    label: "ASMET SALUD",
+  },
+  {
+    value: "ESS118",
+    label: "EMSSANAR E.S.S.",
+  },
+  {
+    value: "EPSS34",
+    label: "CAPITAL SALUD EPS-S",
+  },
+  {
+    value: "EPSS40",
+    label: "SAVIA SALUD EPS",
+  },
+  {
+    value: "EPSI01",
+    label: "DUSAKAWI EPSI",
+  },
+  {
+    value: "EPSI03",
+    label: "ASOCIACION INDIGENA DEL CAUCA EPSI",
+  },
+  {
+    value: "EPSI04",
+    label: "ANAS WAYUU EPSI",
+  },
+  {
+    value: "EPSI05",
+    label: "MALLAMAS EPSI",
+  },
+  {
+    value: "EPSI06",
+    label: "PIJAOS SALUD EPSI",
+  },
+  {
+    value: "EPS047",
+    label: "SALUD BÓLIVAR EPS SAS",
+  }
+]
+
 export default function Page() {
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
@@ -106,7 +239,7 @@ export default function Page() {
     <div className="flex justify-center items-center min-h-screen">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full md:w-2/3 space-y-6">
-          <FormField
+          {/* <FormField
             control={form.control}
             name="firstname"
             render={({ field }) => (
@@ -120,13 +253,27 @@ export default function Page() {
                 <FormMessage className="text-red-600 md:w-2/3" />
               </FormItem>
             )}
+          /> */}
+          <FormField
+            control={form.control}
+            name="firstname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nombres</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Beatriz Aurora" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <FormField
             control={form.control}
             name="lastname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Pinzón Solano" {...field} />
@@ -155,8 +302,59 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Celular</FormLabel>
                 <FormControl>
-                  <Input placeholder="3007207091" {...field} />
+                  <Input placeholder="300123456" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="eps"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>EPS</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? epsList.find((eps) => eps.value === field.value)?.label
+                        : "Seleccione EPS"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Buscar EPS..." className="h-9" />
+                      <CommandEmpty>EPS no encontrada</CommandEmpty>
+                      <CommandGroup>
+                        {epsList.map((eps) => (
+                          <CommandItem
+                            key={eps.value}
+                            onSelect={() => {
+                              form.setValue("eps", eps.value)
+                            }}
+                          >
+                            {eps.label}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                eps.value === field.value ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
@@ -181,7 +379,7 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Celular contacto</FormLabel>
                 <FormControl>
-                  <Input placeholder="3007207091" {...field} />
+                  <Input placeholder="300123456" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -195,7 +393,7 @@ export default function Page() {
                 <FormLabel>RH</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="O+" />
+                    <SelectValue placeholder="Grupo sanguíneo" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="O-">O-</SelectItem>
