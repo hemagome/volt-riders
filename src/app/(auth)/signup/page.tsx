@@ -74,12 +74,12 @@ const FormSchema = z.object({
     invalid_type_error: "El teléfono debe ser numérico",
   }).int().gte(3000000000).lte(3299999999),
   contactName: z.string({
-    required_error: "Nombre es requerido",
+    required_error: "Nombre contacto es requerido",
   }).min(3, {
     message: "Nombre debe tener al menos 3 letras",
   }),
   rh: z.string({
-    required_error: "Por favor seleccione una opción",
+    required_error: "Por favor seleccione un grupo sanguíneo",
   }).min(2).max(3),
   birthdate: z.date({
     required_error: "Fecha de nacimiento es requerida",
@@ -259,7 +259,7 @@ export default function Page() {
             name="firstname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nombres</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Beatriz Aurora" {...field} />
@@ -287,7 +287,7 @@ export default function Page() {
             name="cc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Número documento</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número documento</FormLabel>
                 <FormControl>
                   <Input placeholder="1234567890" {...field} />
                 </FormControl>
@@ -300,7 +300,7 @@ export default function Page() {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Celular</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</FormLabel>
                 <FormControl>
                   <Input placeholder="300123456" {...field} />
                 </FormControl>
@@ -313,7 +313,7 @@ export default function Page() {
             name="eps"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>EPS</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -364,7 +364,7 @@ export default function Page() {
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Contacto de emergencia</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contacto de emergencia</FormLabel>
                 <FormControl>
                   <Input placeholder="Mamá" {...field} />
                 </FormControl>
@@ -377,7 +377,7 @@ export default function Page() {
             name="contactPhone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Celular contacto</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular contacto</FormLabel>
                 <FormControl>
                   <Input placeholder="300123456" {...field} />
                 </FormControl>
@@ -390,22 +390,25 @@ export default function Page() {
             name="rh"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>RH</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Grupo sanguíneo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="O-">O-</SelectItem>
-                    <SelectItem value="O+">O+</SelectItem>
-                    <SelectItem value="A-">A-</SelectItem>
-                    <SelectItem value="A+">A+</SelectItem>
-                    <SelectItem value="B-">B-</SelectItem>
-                    <SelectItem value="B+">B+</SelectItem>
-                    <SelectItem value="AB-">AB-</SelectItem>
-                    <SelectItem value="AB+">AB+</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RH</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Grupo sanguíneo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="O-">O-</SelectItem>
+                      <SelectItem value="O+">O+</SelectItem>
+                      <SelectItem value="A-">A-</SelectItem>
+                      <SelectItem value="A+">A+</SelectItem>
+                      <SelectItem value="B-">B-</SelectItem>
+                      <SelectItem value="B+">B+</SelectItem>
+                      <SelectItem value="AB-">AB-</SelectItem>
+                      <SelectItem value="AB+">AB+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -414,7 +417,7 @@ export default function Page() {
             name="birthdate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Fecha de nacimiento</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de nacimiento</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -437,8 +440,11 @@ export default function Page() {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      captionLayout="dropdown-buttons"
                       selected={field.value}
                       onSelect={field.onChange}
+                      fromYear={1960}
+                      toYear={2023}
                       disabled={(date) =>
                         date > new Date() || date < new Date("1900-01-01")
                       }
@@ -455,7 +461,7 @@ export default function Page() {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cómo te enteraste del club?</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cómo te enteraste del club?</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Cuentanos un poco acerca de ti"
