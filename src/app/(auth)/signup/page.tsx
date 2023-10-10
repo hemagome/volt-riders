@@ -94,7 +94,7 @@ const FormSchema = z.object({
     }),
   eps: z.string({
     required_error: "Por favor seleccione una EPS",
-  }),
+  })
 });
 
 const locale = es;
