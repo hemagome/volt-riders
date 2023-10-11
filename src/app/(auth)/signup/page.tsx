@@ -101,131 +101,13 @@ const FormSchema = z.object({
 
 const locale = es;
 
-const epsList = [
-  {
-    id: "ESS024 - EPS042",
-    name: "COOSALUD EPS-S",
-  },
-  {
-    id: "EPS037 - EPSS41",
-    name: "NUEVA EPS",
-  },
-  {
-    id: "ESS207 - EPS048",
-    name: "MUTUAL SER",
-  },
-  {
-    id: "EPS001",
-    name: "ALIANSALUD EPS",
-  },
-  {
-    id: "EPS002",
-    name: "SALUD TOTAL EPS S.A",
-  },
-  {
-    id: "EPS005",
-    name: "EPS SANITAS",
-  },
-  {
-    id: "EPS010",
-    name: "EPS SURA",
-  },
-  {
-    id: "EPS017",
-    name: "FAMISANAR",
-  },
-  {
-    id: "EPS018",
-    name: "SERVICIO OCCIDENTAL DE SALUD EPS SOS",
-  },
-  {
-    id: "EPS046",
-    name: "SALUD MIA",
-  },
-  {
-    id: "EPS012",
-    name: "COMFENALCO VALLE",
-  },
-  {
-    id: "EPS008",
-    name: "COMPENSAR EPS",
-  },
-  {
-    id: "EAS016",
-    name: "EPM - EMPRESAS PUBLICAS DE MEDELLIN",
-  },
-  {
-    id: "EAS027",
-    name: "FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA",
-  },
-  {
-    id: "CCF055",
-    name: "CAJACOPI ATLANTICO",
-  },
-  {
-    id: "EPS025",
-    name: "CAPRESOCA",
-  },
-  {
-    id: "CCF102",
-    name: "COMFACHOCO",
-  },
-  {
-    id: "CCF050",
-    name: "COMFAORIENTE",
-  },
-  {
-    id: "CCF033",
-    name: "EPS FAMILIAR DE COLOMBIA",
-  },
-  {
-    id: "ESS062",
-    name: "ASMET SALUD",
-  },
-  {
-    id: "ESS118",
-    name: "EMSSANAR E.S.S.",
-  },
-  {
-    id: "EPSS34",
-    name: "CAPITAL SALUD EPS-S",
-  },
-  {
-    id: "EPSS40",
-    name: "SAVIA SALUD EPS",
-  },
-  {
-    id: "EPSI01",
-    name: "DUSAKAWI EPSI",
-  },
-  {
-    id: "EPSI03",
-    name: "ASOCIACION INDIGENA DEL CAUCA EPSI",
-  },
-  {
-    id: "EPSI04",
-    name: "ANAS WAYUU EPSI",
-  },
-  {
-    id: "EPSI05",
-    name: "MALLAMAS EPSI",
-  },
-  {
-    id: "EPSI06",
-    name: "PIJAOS SALUD EPSI",
-  },
-  {
-    id: "EPS047",
-    name: "SALUD BÓLIVAR EPS SAS",
-  }
-]
-
 export default function Page() {
 
   const fetcher = (...args: Parameters<typeof fetch>) => 
     fetch(...args).then((res) => res.json());
 
-  const {data} = useSWR<Eps>('/api/eps', fetcher)
+  const {data} = useSWR<Eps[]>('/api/eps', fetcher)
+  const epsList = data
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -332,7 +214,7 @@ export default function Page() {
                       )}
                     >
                       {field.value
-                        ? epsList.find((eps) => eps.id === field.value)?.name
+                        ? epsList?.find((eps) => eps.id === field.value)?.name
                         : "Seleccione EPS"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -342,7 +224,7 @@ export default function Page() {
                       <CommandInput placeholder="Buscar EPS..." className="h-9" />
                       <CommandEmpty>EPS no encontrada</CommandEmpty>
                       <CommandGroup>
-                        {epsList.map((eps) => (
+                        {epsList?.map((eps) => (
                           <CommandItem
                             key={eps.id}
                             onSelect={() => {
