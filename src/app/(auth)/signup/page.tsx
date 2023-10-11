@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import useSWR from 'swr';
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -20,6 +21,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { format } from "date-fns";
+import { Eps } from "@/lib/schema";
 import es from 'date-fns/locale/es';
 import {
   Form,
@@ -101,124 +103,129 @@ const locale = es;
 
 const epsList = [
   {
-    value: "ESS024 - EPS042",
-    label: "COOSALUD EPS-S",
+    id: "ESS024 - EPS042",
+    name: "COOSALUD EPS-S",
   },
   {
-    value: "EPS037 - EPSS41",
-    label: "NUEVA EPS",
+    id: "EPS037 - EPSS41",
+    name: "NUEVA EPS",
   },
   {
-    value: "ESS207 - EPS048",
-    label: "MUTUAL SER",
+    id: "ESS207 - EPS048",
+    name: "MUTUAL SER",
   },
   {
-    value: "EPS001",
-    label: "ALIANSALUD EPS",
+    id: "EPS001",
+    name: "ALIANSALUD EPS",
   },
   {
-    value: "EPS002",
-    label: "SALUD TOTAL EPS S.A",
+    id: "EPS002",
+    name: "SALUD TOTAL EPS S.A",
   },
   {
-    value: "EPS005",
-    label: "EPS SANITAS",
+    id: "EPS005",
+    name: "EPS SANITAS",
   },
   {
-    value: "EPS010",
-    label: "EPS SURA",
+    id: "EPS010",
+    name: "EPS SURA",
   },
   {
-    value: "EPS017",
-    label: "FAMISANAR",
+    id: "EPS017",
+    name: "FAMISANAR",
   },
   {
-    value: "EPS018",
-    label: "SERVICIO OCCIDENTAL DE SALUD EPS SOS",
+    id: "EPS018",
+    name: "SERVICIO OCCIDENTAL DE SALUD EPS SOS",
   },
   {
-    value: "EPS046",
-    label: "SALUD MIA",
+    id: "EPS046",
+    name: "SALUD MIA",
   },
   {
-    value: "EPS012",
-    label: "COMFENALCO VALLE",
+    id: "EPS012",
+    name: "COMFENALCO VALLE",
   },
   {
-    value: "EPS008",
-    label: "COMPENSAR EPS",
+    id: "EPS008",
+    name: "COMPENSAR EPS",
   },
   {
-    value: "EAS016",
-    label: "EPM - EMPRESAS PUBLICAS DE MEDELLIN",
+    id: "EAS016",
+    name: "EPM - EMPRESAS PUBLICAS DE MEDELLIN",
   },
   {
-    value: "EAS027",
-    label: "FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA",
+    id: "EAS027",
+    name: "FONDO DE PASIVO SOCIAL DE FERROCARRILES NACIONALES DE COLOMBIA",
   },
   {
-    value: "CCF055",
-    label: "CAJACOPI ATLANTICO",
+    id: "CCF055",
+    name: "CAJACOPI ATLANTICO",
   },
   {
-    value: "EPS025",
-    label: "CAPRESOCA",
+    id: "EPS025",
+    name: "CAPRESOCA",
   },
   {
-    value: "CCF102",
-    label: "COMFACHOCO",
+    id: "CCF102",
+    name: "COMFACHOCO",
   },
   {
-    value: "CCF050",
-    label: "COMFAORIENTE",
+    id: "CCF050",
+    name: "COMFAORIENTE",
   },
   {
-    value: "CCF033",
-    label: "EPS FAMILIAR DE COLOMBIA",
+    id: "CCF033",
+    name: "EPS FAMILIAR DE COLOMBIA",
   },
   {
-    value: "ESS062",
-    label: "ASMET SALUD",
+    id: "ESS062",
+    name: "ASMET SALUD",
   },
   {
-    value: "ESS118",
-    label: "EMSSANAR E.S.S.",
+    id: "ESS118",
+    name: "EMSSANAR E.S.S.",
   },
   {
-    value: "EPSS34",
-    label: "CAPITAL SALUD EPS-S",
+    id: "EPSS34",
+    name: "CAPITAL SALUD EPS-S",
   },
   {
-    value: "EPSS40",
-    label: "SAVIA SALUD EPS",
+    id: "EPSS40",
+    name: "SAVIA SALUD EPS",
   },
   {
-    value: "EPSI01",
-    label: "DUSAKAWI EPSI",
+    id: "EPSI01",
+    name: "DUSAKAWI EPSI",
   },
   {
-    value: "EPSI03",
-    label: "ASOCIACION INDIGENA DEL CAUCA EPSI",
+    id: "EPSI03",
+    name: "ASOCIACION INDIGENA DEL CAUCA EPSI",
   },
   {
-    value: "EPSI04",
-    label: "ANAS WAYUU EPSI",
+    id: "EPSI04",
+    name: "ANAS WAYUU EPSI",
   },
   {
-    value: "EPSI05",
-    label: "MALLAMAS EPSI",
+    id: "EPSI05",
+    name: "MALLAMAS EPSI",
   },
   {
-    value: "EPSI06",
-    label: "PIJAOS SALUD EPSI",
+    id: "EPSI06",
+    name: "PIJAOS SALUD EPSI",
   },
   {
-    value: "EPS047",
-    label: "SALUD BÓLIVAR EPS SAS",
+    id: "EPS047",
+    name: "SALUD BÓLIVAR EPS SAS",
   }
 ]
 
 export default function Page() {
+
+  const fetcher = (...args: Parameters<typeof fetch>) => 
+    fetch(...args).then((res) => res.json());
+
+  const {data} = useSWR<Eps>('/api/eps', fetcher)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -325,7 +332,7 @@ export default function Page() {
                       )}
                     >
                       {field.value
-                        ? epsList.find((eps) => eps.value === field.value)?.label
+                        ? epsList.find((eps) => eps.id === field.value)?.name
                         : "Seleccione EPS"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -337,16 +344,16 @@ export default function Page() {
                       <CommandGroup>
                         {epsList.map((eps) => (
                           <CommandItem
-                            key={eps.value}
+                            key={eps.id}
                             onSelect={() => {
-                              form.setValue("eps", eps.value)
+                              form.setValue("eps", eps.id)
                             }}
                           >
-                            {eps.label}
+                            {eps.name}
                             <CheckIcon
                               className={cn(
                                 "ml-auto h-4 w-4",
-                                eps.value === field.value ? "opacity-100" : "opacity-0"
+                                eps.id === field.value ? "opacity-100" : "opacity-0"
                               )}
                             />
                           </CommandItem>
