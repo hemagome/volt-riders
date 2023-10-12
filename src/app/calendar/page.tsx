@@ -12,12 +12,16 @@ import {
 
 const events = [
   {
-    title: "Hola",
-    start: "2023-10-12",
+    title: "La sultana🎁 🎉🎈",
+    start: "2023-09-26",
+    color: "#f6bf13",
+    description: "Se nos puso vieja la Camila",
   },
   {
-    title: "Adios",
-    start: "2023-10-12",
+    title: "⚡🚨Día sin carro",
+    start: "2023-09-21",
+    color: "#e43e2f",
+    description: "Hector no piensa volver a buscar sitio para comer",
   },
 ];
 
@@ -29,16 +33,10 @@ export default class DemoApp extends React.Component {
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         events={events}
-        eventDidMount={() => {
-          return (
-            <HoverCard>
-              <HoverCardTrigger>Hover</HoverCardTrigger>
-              <HoverCardContent>
-                The React Framework – created and maintained by @vercel.
-              </HoverCardContent>
-            </HoverCard>
-          );
+        eventClick={(info) => {
+          console.log(info.event.extendedProps.description);
         }}
+        eventDidMount={(info) => {}}
       />
     );
   }
