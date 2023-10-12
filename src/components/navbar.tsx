@@ -21,6 +21,7 @@ export function Navbar() {
     const menus = [
         { title: "Registrate", path: "/signup" },
         { title: "Blog", path: "/your-path" },
+        { title: "Cronograma", path: "/calendar" },
         { title: "Acerca de nosotros", path: "/your-path" },
         { title: "Contáctanos", path: "/your-path" },
     ]
