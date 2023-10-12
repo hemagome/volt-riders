@@ -1,16 +1,12 @@
-"use client"
+"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import useSWR from 'swr';
+import useSWR from "swr";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  CalendarIcon,
-  CaretSortIcon,
-  CheckIcon
-} from "@radix-ui/react-icons";
+import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import {
@@ -22,7 +18,7 @@ import {
 } from "@/components/ui/command";
 import { format } from "date-fns";
 import { Eps } from "@/lib/schema";
-import es from 'date-fns/locale/es';
+import es from "date-fns/locale/es";
 import {
   Form,
   FormControl,
@@ -49,40 +45,61 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
 const FormSchema = z.object({
-  firstname: z.string({
-    required_error: "Nombre es requerido",
-  }).min(3, {
-    message: "Nombre debe tener al menos 3 letras",
-  }),
-  lastname: z.string({
-    required_error: "Apellidos son requeridos",
-  }).min(3, {
-    message: "Nombre debe tener al menos 3 letras",
-  }),
-  cc: z.coerce.number({
-    required_error: "Documento es requerido",
-    invalid_type_error: "El documento debe ser numérico",
-  }).int().gte(10000000, {
-    message: "Cedula debe tener al menos 8 digitos",
-  }).lte(9999999999, {
-    message: "Cedula no puede tener más de 10 digitos",
-  }),
-  phone: z.coerce.number({
-    required_error: "Teléfono requerido",
-    invalid_type_error: "El teléfono debe ser numérico",
-  }).int().gte(3000000000).lte(3299999999),
-  contactPhone: z.coerce.number({
-    required_error: "Teléfono requerido",
-    invalid_type_error: "El teléfono debe ser numérico",
-  }).int().gte(3000000000).lte(3299999999),
-  contactName: z.string({
-    required_error: "Nombre contacto es requerido",
-  }).min(3, {
-    message: "Nombre debe tener al menos 3 letras",
-  }),
-  rh: z.string({
-    required_error: "Por favor seleccione un grupo sanguíneo",
-  }).min(2).max(3),
+  firstname: z
+    .string({
+      required_error: "Nombre es requerido",
+    })
+    .min(3, {
+      message: "Nombre debe tener al menos 3 letras",
+    }),
+  lastname: z
+    .string({
+      required_error: "Apellidos son requeridos",
+    })
+    .min(3, {
+      message: "Nombre debe tener al menos 3 letras",
+    }),
+  cc: z.coerce
+    .number({
+      required_error: "Documento es requerido",
+      invalid_type_error: "El documento debe ser numérico",
+    })
+    .int()
+    .gte(10000000, {
+      message: "Cedula debe tener al menos 8 digitos",
+    })
+    .lte(9999999999, {
+      message: "Cedula no puede tener más de 10 digitos",
+    }),
+  phone: z.coerce
+    .number({
+      required_error: "Teléfono requerido",
+      invalid_type_error: "El teléfono debe ser numérico",
+    })
+    .int()
+    .gte(3000000000)
+    .lte(3299999999),
+  contactPhone: z.coerce
+    .number({
+      required_error: "Teléfono requerido",
+      invalid_type_error: "El teléfono debe ser numérico",
+    })
+    .int()
+    .gte(3000000000)
+    .lte(3299999999),
+  contactName: z
+    .string({
+      required_error: "Nombre contacto es requerido",
+    })
+    .min(3, {
+      message: "Nombre debe tener al menos 3 letras",
+    }),
+  rh: z
+    .string({
+      required_error: "Por favor seleccione un grupo sanguíneo",
+    })
+    .min(2)
+    .max(3),
   birthdate: z.date({
     required_error: "Fecha de nacimiento es requerida",
   }),
@@ -96,22 +113,21 @@ const FormSchema = z.object({
     }),
   eps: z.string({
     required_error: "Por favor seleccione una EPS",
-  })
+  }),
 });
 
 const locale = es;
 
 export default function Page() {
-
-  const fetcher = (...args: Parameters<typeof fetch>) => 
+  const fetcher = (...args: Parameters<typeof fetch>) =>
     fetch(...args).then((res) => res.json());
 
-  const {data} = useSWR<Eps[]>('/api/eps', fetcher)
-  const epsList = data
+  const { data } = useSWR<Eps[]>("/api/eps", fetcher);
+  const epsList = data;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+  });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -121,13 +137,16 @@ export default function Page() {
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    })
+    });
   }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full md:w-2/3 space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full md:w-2/3 space-y-6"
+        >
           {/* <FormField
             control={form.control}
             name="firstname"
@@ -148,10 +167,11 @@ export default function Page() {
             name="firstname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Nombres
+                </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Beatriz Aurora" {...field} />
+                  <Input placeholder="Beatriz Aurora" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -162,10 +182,11 @@ export default function Page() {
             name="lastname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Apellidos
+                </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Pinzón Solano" {...field} />
+                  <Input placeholder="Pinzón Solano" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -176,7 +197,9 @@ export default function Page() {
             name="cc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número documento</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Número documento
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="1234567890" {...field} />
                 </FormControl>
@@ -189,7 +212,9 @@ export default function Page() {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Celular
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="300123456" {...field} />
                 </FormControl>
@@ -202,7 +227,9 @@ export default function Page() {
             name="eps"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  EPS
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -221,21 +248,26 @@ export default function Page() {
                   </PopoverTrigger>
                   <PopoverContent className="w-[200px] p-0">
                     <Command>
-                      <CommandInput placeholder="Buscar EPS..." className="h-9" />
+                      <CommandInput
+                        placeholder="Buscar EPS..."
+                        className="h-9"
+                      />
                       <CommandEmpty>EPS no encontrada</CommandEmpty>
                       <CommandGroup>
                         {epsList?.map((eps) => (
                           <CommandItem
                             key={eps.id}
                             onSelect={() => {
-                              form.setValue("eps", eps.id)
+                              form.setValue("eps", eps.id);
                             }}
                           >
                             {eps.name}
                             <CheckIcon
                               className={cn(
                                 "ml-auto h-4 w-4",
-                                eps.id === field.value ? "opacity-100" : "opacity-0"
+                                eps.id === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
                               )}
                             />
                           </CommandItem>
@@ -253,7 +285,9 @@ export default function Page() {
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contacto de emergencia</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Contacto de emergencia
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Mamá" {...field} />
                 </FormControl>
@@ -266,7 +300,9 @@ export default function Page() {
             name="contactPhone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular contacto</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Celular contacto
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="300123456" {...field} />
                 </FormControl>
@@ -279,9 +315,14 @@ export default function Page() {
             name="rh"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RH</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  RH
+                </FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Grupo sanguíneo" />
                     </SelectTrigger>
@@ -306,7 +347,9 @@ export default function Page() {
             name="birthdate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de nacimiento</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Fecha de nacimiento
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -350,7 +393,9 @@ export default function Page() {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cómo te enteraste del club?</FormLabel>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Cómo te enteraste del club?
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Cuentanos un poco acerca de ti"
@@ -369,12 +414,14 @@ export default function Page() {
           <label
             htmlFor="terms"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          > Acepta términos y condiciones
+          >
+            {" "}
+            Acepta términos y condiciones
           </label>
           <br></br>
           <Button type="submit">Enviar</Button>
         </form>
       </Form>
     </div>
-  )
+  );
 }
