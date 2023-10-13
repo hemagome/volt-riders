@@ -15,16 +15,17 @@ import {
   navigationMenuTriggerStyle,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
+import { UserButton } from "@clerk/nextjs";
 
 export function Navbar() {
   const [state, setState] = useState(false);
 
   const menus = [
-    { title: "Registrate", path: "/signup" },
-    { title: "Blog", path: "/your-path" },
+    { title: "Registrate", path: "/sign-up" },
+    { title: "Blog", path: "/blog" },
     { title: "Cronograma", path: "/calendar" },
-    { title: "Acerca de nosotros", path: "/your-path" },
-    { title: "Contáctanos", path: "/your-path" },
+    { title: "Acerca de nosotros", path: "/about-us" },
+    { title: "Iniciar sesión", path: "/sign-in" },
   ];
   return (
     <nav className="bg-white w-full border-b md:border-0">
@@ -61,6 +62,7 @@ export function Navbar() {
             ))}
           </ul>
         </div>
+        <UserButton afterSignOutUrl="/" />
       </div>
     </nav>
   );
