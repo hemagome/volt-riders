@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    /* background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(208,198,178,1) 0%, rgba(255,255,255,1) 100%); */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -74,6 +76,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
