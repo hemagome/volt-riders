@@ -120,7 +120,6 @@ const FormSchema = z.object({
 const locale = es;
 
 export default function Page() {
-
   const { data: epsList } = useSWR<Eps[]>("/api/eps", fetcher);
 
   const form = useForm<z.infer<typeof FormSchema>>({

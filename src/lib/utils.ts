@@ -6,4 +6,4 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const fetcher = (...args: Parameters<typeof fetch>) =>
-fetch(...args).then((res) => res.json());
+  fetch(...args).then((res) => res.json());

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { HamburgerMenuIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
-import { Menu } from "@/lib/constants";
+import { Menu, Label } from "@/lib/constants";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -29,7 +29,7 @@ import { UserButton } from "@clerk/nextjs";
 
 export function Navbar() {
   const [state, setState] = useState(false);
-  const { setTheme } = useTheme()
+  const { setTheme } = useTheme();
 
   const menus = [
     { title: Menu.SIGN_UP, path: "/sign-up" },
@@ -50,6 +50,7 @@ export function Navbar() {
               height={24}
             />
           </Link>
+
           <div className="md:hidden">
             <button
               className="text-gray-700 outline-none p-2 rounded-md focus:border-gray-400 focus:border"
@@ -61,13 +62,19 @@ export function Navbar() {
           </div>
         </div>
         <div
-          className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${state ? "block" : "hidden"
-            }`}
+          className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
+            state ? "block" : "hidden"
+          }`}
         >
           <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
             {menus.map((item, idx) => (
-              <li key={idx} className="hover:text-gray-600 dark:hover:text-yellow-500">
-                <Link href={item.path}>{item.title}</Link>
+              <li
+                key={idx}
+                className="hover:text-gray-600 dark:hover:text-yellow-500"
+              >
+                <Link href={item.path} onClick={() => setState(!state)}>
+                  {item.title}
+                </Link>
               </li>
             ))}
           </ul>
@@ -76,7 +83,7 @@ export function Navbar() {
           <a href="https://www.instagram.com/voltriderscol/" target="_blank">
             <Button variant="outline" size="icon">
               {" "}
-              <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]"/>
+              <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
             </Button>
           </a>
         </div>
@@ -91,18 +98,20 @@ export function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setTheme("light")}>
-                Luz
+                {Label.LIGHT}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
-                Oscuro
+                {Label.DARK}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
-                Sistema
+                {Label.SYSTEM}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div><UserButton afterSignOutUrl="/" /></div>
+        <div>
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </div>
     </nav>
   );
