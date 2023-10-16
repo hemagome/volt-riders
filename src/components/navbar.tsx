@@ -50,15 +50,42 @@ export function Navbar() {
               height={24}
             />
           </Link>
-
-          <div className="md:hidden">
-            <button
-              className="text-gray-700 outline-none p-2 rounded-md focus:border-gray-400 focus:border"
+          <div className="md:hidden flex items-center">
+            <a href="https://www.instagram.com/voltriderscol/" target="_blank">
+              <Button variant="outline" size="icon">
+                {" "}
+                <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
+            </a>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                  <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                  <span className="sr-only">Cambiar tema</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setTheme("light")}>
+                  {Label.LIGHT}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                  {Label.DARK}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")}>
+                  {Label.SYSTEM}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="outline"
+              size="icon"
+              className="text-gray-700 outline-none p-2 rounded-md"
               onClick={() => setState(!state)}
             >
               {" "}
               <HamburgerMenuIcon />
-            </button>
+            </Button>
           </div>
         </div>
         <div
@@ -79,15 +106,13 @@ export function Navbar() {
             ))}
           </ul>
         </div>
-        <div>
+        <div className="hidden md:block">
           <a href="https://www.instagram.com/voltriderscol/" target="_blank">
             <Button variant="outline" size="icon">
               {" "}
               <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
             </Button>
           </a>
-        </div>
-        <div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">
