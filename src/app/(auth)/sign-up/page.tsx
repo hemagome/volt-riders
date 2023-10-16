@@ -4,11 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import * as z from "zod";
+import { Label } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -119,11 +120,8 @@ const FormSchema = z.object({
 const locale = es;
 
 export default function Page() {
-  const fetcher = (...args: Parameters<typeof fetch>) =>
-    fetch(...args).then((res) => res.json());
 
-  const { data } = useSWR<Eps[]>("/api/eps", fetcher);
-  const epsList = data;
+  const { data: epsList } = useSWR<Eps[]>("/api/eps", fetcher);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -168,7 +166,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Nombres
+                  {Label.NAME}
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="Beatriz Aurora" {...field} />
@@ -183,7 +181,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Apellidos
+                  {Label.LASTNAME}
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="Pinzón Solano" {...field} />
@@ -213,7 +211,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Celular
+                  {Label.PHONE}
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="300123456" {...field} />
@@ -228,7 +226,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  EPS
+                  {Label.EPS}
                 </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -286,7 +284,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Contacto de emergencia
+                  {Label.EMERGENCY_CONTACT}
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="Mamá" {...field} />
@@ -316,7 +314,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  RH
+                  {Label.RH}
                 </FormLabel>
                 <FormControl>
                   <Select
@@ -348,7 +346,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Fecha de nacimiento
+                  {Label.BIRTHDATE}
                 </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -416,7 +414,7 @@ export default function Page() {
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {" "}
-            Acepta términos y condiciones
+            {Label.AGREE_TERMS}
           </label>
           <br></br>
           <Button type="submit">Enviar</Button>

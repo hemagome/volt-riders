@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { Menu } from "@/lib/constants";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -21,11 +22,11 @@ export function Navbar() {
   const [state, setState] = useState(false);
 
   const menus = [
-    { title: "Registrate", path: "/sign-up" },
-    { title: "Blog", path: "/blog" },
-    { title: "Cronograma", path: "/calendar" },
-    { title: "Acerca de nosotros", path: "/about-us" },
-    { title: "Iniciar sesión", path: "/sign-in" },
+    { title: Menu.SIGN_UP, path: "/sign-up" },
+    { title: Menu.BLOG, path: "/blog" },
+    { title: Menu.CALENDAR, path: "/calendar" },
+    { title: Menu.ABOUT_US, path: "/about-us" },
+    { title: Menu.SIGN_IN, path: "/sign-in" },
   ];
   return (
     <nav className="bg-white w-full border-b md:border-0">
