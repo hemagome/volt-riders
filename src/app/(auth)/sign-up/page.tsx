@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import * as z from "zod";
 import { Label } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -120,7 +120,7 @@ const FormSchema = z.object({
 const locale = es;
 
 export default function Page() {
-  const { data: epsList } = useSWR<Eps[]>("/api/eps", fetcher);
+  const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
