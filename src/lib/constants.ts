@@ -16,6 +16,7 @@ export namespace Label {
 }
 export namespace Menu {
   export const ABOUT_US: string = "Acerca de nosotros";
+  export const BENEFITS: string = "Beneficios";
   export const BLOG: string = "Blog";
   export const CALENDAR: string = "Cronograma";
   export const SIGN_IN: string = "Iniciar sesión";

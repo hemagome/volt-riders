@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/localizations": "^1.26.4",
-    "@clerk/nextjs": "^4.25.4",
-    "@clerk/themes": "^1.7.7",
+    "@clerk/localizations": "^1.26.5",
+    "@clerk/nextjs": "^4.25.5",
+    "@clerk/themes": "^1.7.8",
     "@fullcalendar/core": "^6.1.9",
     "@fullcalendar/daygrid": "^6.1.9",
     "@fullcalendar/react": "^6.1.9",
@@ -45,6 +45,7 @@
     "react-day-picker": "^8.9.0",
     "react-dom": "latest",
     "react-hook-form": "^7.47.0",
+    "react-icons": "^4.11.0",
     "swr": "^2.2.4",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",

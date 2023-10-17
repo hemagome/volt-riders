@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
 
-module.exports = nextConfig;
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "scontent.fbog19-1.fna.fbcdn.net",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+};

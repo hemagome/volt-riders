@@ -34,14 +34,22 @@ export function Navbar() {
   const { isSignedIn } = useUser();
 
   const menus = [
-    { title: Menu.SIGN_UP, path: "/sign-up" },
+    !isSignedIn
+      ? { title: Menu.SIGN_UP, path: "/sign-up" }
+      : { title: "", path: "" },
+    !isSignedIn
+      ? { title: Menu.SIGN_IN, path: "/sign-in" }
+      : { title: "", path: "" },
     { title: Menu.BLOG, path: "/blog" },
     { title: Menu.ABOUT_US, path: "/about-us" },
-    { title: Menu.SIGN_IN, path: "/sign-in" },
     isSignedIn
       ? { title: Menu.CALENDAR, path: "/calendar" }
       : { title: "", path: "" },
+    isSignedIn
+      ? { title: Menu.BENEFITS, path: "/benefits" }
+      : { title: "", path: "" },
   ];
+
   return (
     <nav className="w-full border-b ">
       <div className="items-center px-4 max-w-screen-xl mx-auto md:flex md:px-8">

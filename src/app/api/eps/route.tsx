@@ -3,7 +3,5 @@ import { eps } from "@/lib/schema";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
-  const data = await db.select().from(eps).all();
-  console.log(data);
   return NextResponse.json(await db.select().from(eps).all());
 };

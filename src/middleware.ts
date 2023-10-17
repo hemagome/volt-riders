@@ -1,7 +1,7 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
-  publicRoutes: ["/", "/sign-up", "/api/eps"],
+  publicRoutes: ["/", "/sign-up", "/api/eps", "/about-us"],
   debug: true,
 });
 
