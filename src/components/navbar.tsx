@@ -19,6 +19,7 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
+import { useUser } from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,13 +31,16 @@ import { UserButton } from "@clerk/nextjs";
 export function Navbar() {
   const [state, setState] = useState(false);
   const { setTheme } = useTheme();
+  const { isSignedIn } = useUser();
 
   const menus = [
     { title: Menu.SIGN_UP, path: "/sign-up" },
     { title: Menu.BLOG, path: "/blog" },
-    { title: Menu.CALENDAR, path: "/calendar" },
     { title: Menu.ABOUT_US, path: "/about-us" },
     { title: Menu.SIGN_IN, path: "/sign-in" },
+    isSignedIn
+      ? { title: Menu.CALENDAR, path: "/calendar" }
+      : { title: "", path: "" },
   ];
   return (
     <nav className="w-full border-b ">
@@ -48,6 +52,7 @@ export function Navbar() {
               alt="Logo VoltRiders"
               width={100}
               height={24}
+              priority
             />
           </Link>
           <div className="md:hidden flex items-center">
@@ -85,6 +90,9 @@ export function Navbar() {
             >
               {" "}
               <HamburgerMenuIcon />
+            </Button>
+            <Button variant="link" size="icon">
+              <UserButton afterSignOutUrl="/" />
             </Button>
           </div>
         </div>
@@ -133,9 +141,9 @@ export function Navbar() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-        <div>
-          <UserButton afterSignOutUrl="/" />
+          <Button variant="link" size="icon">
+            <UserButton afterSignOutUrl="/" />
+          </Button>
         </div>
       </div>
     </nav>
