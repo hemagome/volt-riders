@@ -1,5 +1,5 @@
 import { PresentationCard } from "@/components/card";
-
+import { Label } from "@/lib/constants";
 const tableMembers = [
   {
     name: "Camila Narvaez",
@@ -40,12 +40,14 @@ export default function Page() {
   return (
     <>
       <h1 className="text-3xl mb-4 flex flex-col items-center">
-        Conoce la mesa de trabajo
+        {Label.KNOW_US}
       </h1>
       <div className="w-screen h-screen flex justify-center p-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
           {tableMembers.map((member) => (
-            <PresentationCard data={member} />
+            <div key={member.name}>
+              <PresentationCard data={member} />
+            </div>
           ))}
         </div>
       </div>

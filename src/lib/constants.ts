@@ -4,6 +4,7 @@ export namespace Label {
   export const BIRTHDATE: string = "Fecha de nacimiento";
   export const EMERGENCY_CONTACT: string = "Contacto de emergencia";
   export const EPS: string = "EPS";
+  export const KNOW_US: string = "Conoce la mesa de trabajo";
   export const LASTNAME: string = "Apellido";
   export const NAME: string = "Nombre";
   export const PHONE: string = "Celular";
