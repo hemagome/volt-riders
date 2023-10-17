@@ -1,20 +1,15 @@
 import { db } from "@/lib/turso";
 import { event } from "@/lib/schema";
-import { NextResponse, NextRequest } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 import { like } from "drizzle-orm";
 
 const currentYear = new Date().getFullYear();
 
-export async function GET(request: NextRequest) {
-  // const { userId } = getAuth(request);
-  // if (!userId) {
-  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  // } else {
+export async function GET() {
   const eventData = await db
     .select()
     .from(event)
-    .where(like(event.start, "2023%"));
+    .where(like(event.start, `${currentYear}%`));
 
   const birthData = [
     {
@@ -33,12 +28,12 @@ export async function GET(request: NextRequest) {
     ...eventData.map((item) => ({
       ...item,
       title: `⚡🚨${item.title}`,
-      color: "#f6bf13",
+      color: "#e43b2e",
     })),
     ...birthData.map((item) => ({
       title: `🎁 ${item.name} 🎉🎈`,
       start: `${currentYear}-${item.start.slice(5)}`,
-      color: "#f3bf23",
+      color: "#f3bf13",
       description: `${item.name} esta cumpliendo ${
         currentYear - parseInt(item.start.slice(0, 4))
       } años!`,
@@ -46,5 +41,4 @@ export async function GET(request: NextRequest) {
   ];
 
   return NextResponse.json(data);
-  // }
 }
