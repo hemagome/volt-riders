@@ -40,8 +40,8 @@ export function Navbar() {
     !isSignedIn
       ? { title: Menu.SIGN_IN, path: "/sign-in" }
       : { title: "", path: "" },
-    { title: Menu.BLOG, path: "/blog" },
     { title: Menu.ABOUT_US, path: "/about-us" },
+    isSignedIn ? { title: Menu.BLOG, path: "/blog" } : { title: "", path: "" },
     isSignedIn
       ? { title: Menu.CALENDAR, path: "/calendar" }
       : { title: "", path: "" },
