@@ -1,7 +1,8 @@
 import { db } from "@/lib/turso";
-import { eps, event } from "@/lib/schema";
+import { event } from "@/lib/schema";
 import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
+import { like } from "drizzle-orm";
 
 const currentYear = new Date().getFullYear();
 
@@ -10,20 +11,11 @@ export async function GET(request: NextRequest) {
   // if (!userId) {
   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   // } else {
-  const eventData = [
-    {
-      title: "Día sin carro",
-      start: "2023-09-21",
-      description: "Hector no piensa volver a buscar sitio para comer",
-      url: "",
-    },
-    {
-      title: "Rodada de test",
-      start: "2023-10-22",
-      description: "Dato de prueba",
-      url: "",
-    },
-  ];
+  const eventData = await db
+    .select()
+    .from(event)
+    .where(like(event.start, "2023%"));
+
   const birthData = [
     {
       name: "Maria Camila",
