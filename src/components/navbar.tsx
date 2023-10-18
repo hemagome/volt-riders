@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { HamburgerMenuIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
+import { FacebookIcon } from "lucide-react";
 import Image from "next/image";
 import { Menu, Label } from "@/lib/constants";
 import Link from "next/link";
@@ -70,6 +71,15 @@ export function Navbar() {
                 <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
               </Button>
             </a>
+            <a
+              href="https://m.facebook.com/groups/739020861211134/?ref=share&mibextid=S66gvF"
+              target="_blank"
+            >
+              <Button variant="outline" size="icon">
+                {" "}
+                <FacebookIcon className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
+            </a>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -127,6 +137,15 @@ export function Navbar() {
             <Button variant="outline" size="icon">
               {" "}
               <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
+            </Button>
+          </a>
+          <a
+            href="https://www.facebook.com/groups/739020861211134"
+            target="_blank"
+          >
+            <Button variant="outline" size="icon">
+              {" "}
+              <FacebookIcon className="h-[1.2rem] w-[1.2rem]" />
             </Button>
           </a>
           <DropdownMenu>
