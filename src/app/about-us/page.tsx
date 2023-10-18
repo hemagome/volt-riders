@@ -39,11 +39,12 @@ const tableMembers = [
 export default function Page() {
   return (
     <>
+      <br />
       <h1 className="text-3xl mb-4 flex flex-col items-center">
         {Label.KNOW_US}
       </h1>
       <div className="w-screen h-screen flex justify-center p-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
           {tableMembers.map((member) => (
             <div key={member.name}>
               <PresentationCard data={member} />

@@ -16,3 +16,10 @@ export const event = sqliteTable("event", {
 });
 
 export type Event = InferSelectModel<typeof event>;
+
+export const documentType = sqliteTable("document_type", {
+  abbreviation: text("abbreviation").primaryKey(),
+  name: text("name").notNull(),
+});
+
+export type DocumentType = InferSelectModel<typeof documentType>;

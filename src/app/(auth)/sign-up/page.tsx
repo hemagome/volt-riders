@@ -18,7 +18,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { format } from "date-fns";
-import { Eps } from "@/lib/schema";
+import { Eps, DocumentType } from "@/lib/schema";
 import es from "date-fns/locale/es";
 import {
   Form,
@@ -60,7 +60,7 @@ const FormSchema = z.object({
     .min(3, {
       message: "Nombre debe tener al menos 3 letras",
     }),
-  cc: z.coerce
+  documentNumber: z.coerce
     .number({
       required_error: "Documento es requerido",
       invalid_type_error: "El documento debe ser numérico",
@@ -115,12 +115,18 @@ const FormSchema = z.object({
   eps: z.string({
     required_error: "Por favor seleccione una EPS",
   }),
+  documentType: z.string({ required_error: "Tipo de documento requerido" }),
+  job: z.string({ required_error: "Profesión requerida" }),
 });
 
 const locale = es;
 
 export default function Page() {
   const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
+  const { data: documentTypeList } = useSWRImmutable<DocumentType[]>(
+    "/api/document",
+    fetcher
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -138,7 +144,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen p-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -168,7 +174,11 @@ export default function Page() {
                   {Label.NAME}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Beatriz Aurora" {...field} />
+                  <Input
+                    placeholder="Beatriz Aurora"
+                    className="w-[230px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -183,7 +193,11 @@ export default function Page() {
                   {Label.LASTNAME}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Pinzón Solano" {...field} />
+                  <Input
+                    placeholder="Pinzón Solano"
+                    className="w-[230px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -191,14 +205,69 @@ export default function Page() {
           />
           <FormField
             control={form.control}
-            name="cc"
+            name="documentType"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  {Label.DOCUMENT_TYPE}
+                </FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    // defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[230px]">
+                      <SelectValue placeholder="Seleccione tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {documentTypeList?.map((documentType) => (
+                        <SelectItem
+                          value={documentType.abbreviation}
+                          key={documentType.abbreviation}
+                        >
+                          {documentType.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="documentNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Número documento
+                  {Label.DOCUMENT_NUMBER}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="1234567890" {...field} />
+                  <Input
+                    placeholder="1234567890"
+                    className="w-[230px]"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="job"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  {Label.JOB}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Economista"
+                    className="w-[230px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,7 +282,11 @@ export default function Page() {
                   {Label.PHONE}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="300123456" {...field} />
+                  <Input
+                    placeholder="300123456"
+                    className="w-[230px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -233,7 +306,7 @@ export default function Page() {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-[200px] justify-between",
+                        "w-[230px] justify-between",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -243,7 +316,7 @@ export default function Page() {
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[230px] p-0">
                     <Command>
                       <CommandInput
                         placeholder="Buscar EPS..."
@@ -286,7 +359,7 @@ export default function Page() {
                   {Label.EMERGENCY_CONTACT}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Mamá" {...field} />
+                  <Input placeholder="Mamá" className="w-[230px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -301,7 +374,11 @@ export default function Page() {
                   Celular contacto
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="300123456" {...field} />
+                  <Input
+                    placeholder="300123456"
+                    className="w-[230px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -320,7 +397,7 @@ export default function Page() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[230px]">
                       <SelectValue placeholder="Grupo sanguíneo" />
                     </SelectTrigger>
                     <SelectContent>
@@ -353,7 +430,7 @@ export default function Page() {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
+                          "w-[230px] pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -374,7 +451,7 @@ export default function Page() {
                       onSelect={field.onChange}
                       fromYear={1960}
                       toYear={2023}
-                      disabled={(date) =>
+                      disabled={(date: Date) =>
                         date > new Date() || date < new Date("1900-01-01")
                       }
                       initialFocus

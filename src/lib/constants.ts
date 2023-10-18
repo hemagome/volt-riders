@@ -2,8 +2,11 @@ export namespace Label {
   //Form Labels
   export const AGREE_TERMS: string = "Acepta términos y condiciones";
   export const BIRTHDATE: string = "Fecha de nacimiento";
+  export const DOCUMENT_NUMBER: string = "Número documento";
+  export const DOCUMENT_TYPE: string = "Tipo de documento";
   export const EMERGENCY_CONTACT: string = "Contacto de emergencia";
   export const EPS: string = "EPS";
+  export const JOB: string = "Profesión";
   export const KNOW_US: string = "Conoce la mesa de trabajo";
   export const LASTNAME: string = "Apellido";
   export const NAME: string = "Nombre";
