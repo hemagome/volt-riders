@@ -15,7 +15,7 @@ export async function GET() {
     {
       name: "Maria Camila",
       start: "1997-09-26",
-      url: "",
+      url: "https://www.facebook.com/kamila.n.nunez1",
     },
     {
       name: "Hector Manuel",
@@ -37,6 +37,7 @@ export async function GET() {
       description: `${item.name} esta cumpliendo ${
         currentYear - parseInt(item.start.slice(0, 4))
       } años!`,
+      url: item.url,
     })),
   ];
 

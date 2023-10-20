@@ -42,6 +42,7 @@ export function Navbar() {
       ? { title: Menu.SIGN_IN, path: "/sign-in" }
       : { title: "", path: "" },
     { title: Menu.ABOUT_US, path: "/about-us" },
+    { title: Menu.WEATHER_MAP, path: "/weather" },
     isSignedIn ? { title: Menu.BLOG, path: "/blog" } : { title: "", path: "" },
     isSignedIn
       ? { title: Menu.CALENDAR, path: "/calendar" }

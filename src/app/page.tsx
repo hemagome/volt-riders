@@ -1,11 +1,9 @@
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <iframe
-        src="https://app.sab.gov.co/sab/lluvias.htm"
-        width="600"
-        height="400"
-      ></iframe>
-    </main>
+    <>
+      <div className="bg-gray-200 border border-gray-300 p-2 text-gray-600">
+        Hola
+      </div>
+    </>
   );
 }

@@ -25,4 +25,5 @@ export namespace Menu {
   export const CALENDAR: string = "Cronograma";
   export const SIGN_IN: string = "Iniciar sesión";
   export const SIGN_UP: string = "Registrate";
+  export const WEATHER_MAP: string = "Mapa clima";
 }
