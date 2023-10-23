@@ -117,6 +117,9 @@ const FormSchema = z.object({
   }),
   documentType: z.string({ required_error: "Tipo de documento requerido" }),
   job: z.string({ required_error: "Profesión requerida" }),
+  terms: z
+    .boolean({ required_error: "Se requiere aceptar términos y condiciones" })
+    .default(false),
 });
 
 const locale = es;
@@ -148,23 +151,27 @@ export default function Page() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full md:w-2/3 space-y-6"
+          className="w-full md:w-2/3 space-y-6 md:grid md:grid-cols-2 md:gap-6"
         >
-          {/* <FormField
+          <FormField
             control={form.control}
             name="firstname"
             render={({ field }) => (
               <FormItem className="md:flex md:space-x-4 md:items-center mb-4">
-                <FormLabel className="text-lg font-semibold md:w-1/3">Nombre</FormLabel>
+                <FormLabel className="text-lg font-semibold md:w-1/3">
+                  Nombre
+                </FormLabel>
                 <FormControl className="md:w-2/3">
                   <Input
                     className="border rounded-md p-2 w-full md:w-96"
-                    placeholder="Beatriz Aurora" {...field} />
+                    placeholder="Beatriz Aurora"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage className="text-red-600 md:w-2/3" />
               </FormItem>
             )}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="firstname"
@@ -176,7 +183,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="Beatriz Aurora"
-                    className="w-[230px]"
+                    className="w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -484,16 +491,30 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <Checkbox id="terms" />
-          <label
-            htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            {" "}
-            {Label.AGREE_TERMS}
-          </label>
+          <FormField
+            control={form.control}
+            name="terms"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>{Label.AGREE_TERMS}</FormLabel>
+                </div>
+                {/* <label htmlFor="terms" className="text-sm font-medium ml-2">
+                  {Label.AGREE_TERMS}
+                </label> */}
+              </FormItem>
+            )}
+          />
           <br></br>
-          <Button type="submit">Enviar</Button>
+          <div className="col-span-2 flex justify-center">
+            <Button type="submit">Enviar</Button>
+          </div>
         </form>
       </Form>
     </div>
