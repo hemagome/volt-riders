@@ -120,6 +120,14 @@ const FormSchema = z.object({
   terms: z
     .boolean({ required_error: "Se requiere aceptar términos y condiciones" })
     .default(false),
+  file: z
+    .any()
+    .refine((file) => file?.length == 1, "Factura es requerida")
+    .refine(
+      (file) => file[0]?.type === "application/pdf",
+      "La factura debe encontrarse en PDF"
+    )
+    .refine((file) => file[0]?.size <= 4500000, "El tamaño máximo es 4.5MB"),
 });
 
 const locale = es;
@@ -135,6 +143,8 @@ export default function Page() {
     resolver: zodResolver(FormSchema),
   });
 
+  const fileRef = form.register("file", { required: true });
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
       title: "You submitted the following values:",
@@ -145,15 +155,8 @@ export default function Page() {
       ),
     });
   }
-
-  return (
-    <div className="flex justify-center items-center min-h-screen p-4">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full md:w-2/3 space-y-6 md:grid md:grid-cols-2 md:gap-6"
-        >
-          <FormField
+  {
+    /* <FormField
             control={form.control}
             name="firstname"
             render={({ field }) => (
@@ -171,7 +174,15 @@ export default function Page() {
                 <FormMessage className="text-red-600 md:w-2/3" />
               </FormItem>
             )}
-          />
+          /> */
+  }
+  return (
+    <div className="flex justify-center items-center min-h-screen p-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full md:w-2/3 space-y-6 md:grid md:grid-cols-2 md:gap-6"
+        >
           <FormField
             control={form.control}
             name="firstname"
@@ -183,7 +194,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="Beatriz Aurora"
-                    className="w-[380px]"
+                    className="md:w-[230px] sm:w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -202,7 +213,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="Pinzón Solano"
-                    className="w-[230px]"
+                    className="md:w-[230px] sm:w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -223,7 +234,7 @@ export default function Page() {
                     onValueChange={field.onChange}
                     // defaultValue={field.value}
                   >
-                    <SelectTrigger className="w-[230px]">
+                    <SelectTrigger className="md:w-[230px] sm:w-[380px]">
                       <SelectValue placeholder="Seleccione tipo" />
                     </SelectTrigger>
                     <SelectContent>
@@ -253,7 +264,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="1234567890"
-                    className="w-[230px]"
+                    className="md:w-[230px] sm:w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -272,7 +283,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="Economista"
-                    className="w-[230px]"
+                    className="md:w-[230px] sm:w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -291,7 +302,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="300123456"
-                    className="w-[230px]"
+                    className="md:w-[230px] sm:w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -313,7 +324,7 @@ export default function Page() {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-[230px] justify-between",
+                        "md:w-[230px] sm:w-[380px] justify-between",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -323,7 +334,7 @@ export default function Page() {
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[230px] p-0">
+                  <PopoverContent className="md:w-[230px] sm:w-[380px] p-0">
                     <Command>
                       <CommandInput
                         placeholder="Buscar EPS..."
@@ -366,7 +377,11 @@ export default function Page() {
                   {Label.EMERGENCY_CONTACT}
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Mamá" className="w-[230px]" {...field} />
+                  <Input
+                    placeholder="Mamá"
+                    className="md:w-[230px] sm:w-[380px]"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -383,7 +398,7 @@ export default function Page() {
                 <FormControl>
                   <Input
                     placeholder="300123456"
-                    className="w-[230px]"
+                    className="md:w-[230px] sm:w-[380px]"
                     {...field}
                   />
                 </FormControl>
@@ -404,7 +419,7 @@ export default function Page() {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <SelectTrigger className="w-[230px]">
+                    <SelectTrigger className="md:w-[230px] sm:w-[380px]">
                       <SelectValue placeholder="Grupo sanguíneo" />
                     </SelectTrigger>
                     <SelectContent>
@@ -437,7 +452,7 @@ export default function Page() {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[230px] pl-3 text-left font-normal",
+                          "md:w-[230px] sm:w-[380px] pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -480,13 +495,33 @@ export default function Page() {
                 <FormControl>
                   <Textarea
                     placeholder="Cuentanos un poco acerca de ti"
-                    className="resize-none"
+                    className="resize-y"
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
                   Puedes mencionar si alguien te referencio
                 </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="file"
+            render={({ field }) => (
+              <FormItem className="grid w-full max-w-sm items-center gap-1.5">
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Factura
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="application/pdf"
+                    className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    {...fileRef}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -505,9 +540,6 @@ export default function Page() {
                 <div className="space-y-1 leading-none">
                   <FormLabel>{Label.AGREE_TERMS}</FormLabel>
                 </div>
-                {/* <label htmlFor="terms" className="text-sm font-medium ml-2">
-                  {Label.AGREE_TERMS}
-                </label> */}
               </FormItem>
             )}
           />
