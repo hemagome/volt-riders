@@ -8,10 +8,11 @@ export namespace Label {
   export const EPS: string = "EPS";
   export const JOB: string = "Profesión";
   export const KNOW_US: string = "Conoce la mesa de trabajo";
-  export const LASTNAME: string = "Apellido";
-  export const NAME: string = "Nombre";
+  export const NAME: string = "Nombre completo";
+  export const NICKNAME: string = "Apodo";
   export const PHONE: string = "Celular";
   export const RH: string = "RH";
+  export const VEHICLE_TYPE: string = "Tipo de vehículo";
 
   //Color Labels
   export const LIGHT: string = "Luz";

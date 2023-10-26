@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useSWRImmutable from "swr/immutable";
@@ -53,12 +53,12 @@ const FormSchema = z.object({
     .min(3, {
       message: "Nombre debe tener al menos 3 letras",
     }),
-  lastname: z
+  nickname: z
     .string({
-      required_error: "Apellidos son requeridos",
+      required_error: "Apodo requerido",
     })
     .min(3, {
-      message: "Nombre debe tener al menos 3 letras",
+      message: "Apodo debe tener al menos 3 letras",
     }),
   documentNumber: z.coerce
     .number({
@@ -105,7 +105,7 @@ const FormSchema = z.object({
     required_error: "Fecha de nacimiento es requerida",
   }),
   bio: z
-    .string()
+    .string({ required_error: "Información requerida" })
     .min(10, {
       message: "Información debe tener al menos 10 carácteres",
     })
@@ -119,7 +119,9 @@ const FormSchema = z.object({
   job: z.string({ required_error: "Profesión requerida" }),
   terms: z
     .boolean({ required_error: "Se requiere aceptar términos y condiciones" })
-    .default(false),
+    .refine((value) => value === true, {
+      message: "Se requiere aceptar términos y condiciones",
+    }),
   file: z
     .any()
     .refine((file) => file?.length == 1, "Factura es requerida")
@@ -128,6 +130,7 @@ const FormSchema = z.object({
       "La factura debe encontrarse en PDF"
     )
     .refine((file) => file[0]?.size <= 4500000, "El tamaño máximo es 4.5MB"),
+  vehicleType: z.string({ required_error: "Tipo de vehículo requerido" }),
 });
 
 const locale = es;
@@ -144,7 +147,7 @@ export default function Page() {
   });
 
   const fileRef = form.register("file", { required: true });
-
+  const [calendarOpen, setCalendarOpen] = useState(false);
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
       title: "You submitted the following values:",
@@ -192,11 +195,7 @@ export default function Page() {
                   {Label.NAME}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Beatriz Aurora"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -204,19 +203,18 @@ export default function Page() {
           />
           <FormField
             control={form.control}
-            name="lastname"
+            name="nickname"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  {Label.LASTNAME}
+                  {Label.NICKNAME}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Pinzón Solano"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
+                <FormDescription>
+                  Como te gusta que te llamen o apareces en Whatsapp
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -235,7 +233,7 @@ export default function Page() {
                     // defaultValue={field.value}
                   >
                     <SelectTrigger className="md:w-[230px] sm:w-[380px]">
-                      <SelectValue placeholder="Seleccione tipo" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {documentTypeList?.map((documentType) => (
@@ -262,11 +260,7 @@ export default function Page() {
                   {Label.DOCUMENT_NUMBER}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="1234567890"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -281,11 +275,7 @@ export default function Page() {
                   {Label.JOB}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Economista"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -300,11 +290,7 @@ export default function Page() {
                   {Label.PHONE}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="300123456"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -336,10 +322,7 @@ export default function Page() {
                   </PopoverTrigger>
                   <PopoverContent className="md:w-[230px] sm:w-[380px] p-0">
                     <Command>
-                      <CommandInput
-                        placeholder="Buscar EPS..."
-                        className="h-9"
-                      />
+                      <CommandInput className="h-9" />
                       <CommandEmpty>EPS no encontrada</CommandEmpty>
                       <CommandGroup>
                         {epsList?.map((eps) => (
@@ -377,11 +360,7 @@ export default function Page() {
                   {Label.EMERGENCY_CONTACT}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Mamá"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -396,11 +375,7 @@ export default function Page() {
                   Celular contacto
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="300123456"
-                    className="md:w-[230px] sm:w-[380px]"
-                    {...field}
-                  />
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -420,7 +395,7 @@ export default function Page() {
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="md:w-[230px] sm:w-[380px]">
-                      <SelectValue placeholder="Grupo sanguíneo" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="O-">O-</SelectItem>
@@ -446,7 +421,7 @@ export default function Page() {
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   {Label.BIRTHDATE}
                 </FormLabel>
-                <Popover>
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -457,7 +432,7 @@ export default function Page() {
                         )}
                       >
                         {field.value ? (
-                          format(field.value, "PPP", { locale })
+                          format(new Date(field.value), "PPP", { locale })
                         ) : (
                           <span>Selecciona una fecha</span>
                         )}
@@ -470,7 +445,10 @@ export default function Page() {
                       mode="single"
                       captionLayout="dropdown-buttons"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(date) => {
+                        setCalendarOpen(false);
+                        field.onChange(date);
+                      }}
                       fromYear={1960}
                       toYear={2023}
                       disabled={(date: Date) =>
@@ -480,6 +458,33 @@ export default function Page() {
                     />
                   </PopoverContent>
                 </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="vehicleType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  {Label.VEHICLE_TYPE}
+                </FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="md:w-[230px] sm:w-[380px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Patineta">Patineta</SelectItem>
+                      <SelectItem value="Rueda">Rueda</SelectItem>
+                      <SelectItem value="Moto">Moto</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -522,6 +527,10 @@ export default function Page() {
                     {...fileRef}
                   />
                 </FormControl>
+                <FormDescription>
+                  En caso de que la factura no se encuentre a tu nombre, sube
+                  una declaración juramentada indicando que es de tu propiedad
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -537,13 +546,13 @@ export default function Page() {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>{Label.AGREE_TERMS}</FormLabel>
-                </div>
+                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  {Label.AGREE_TERMS}
+                </FormLabel>
+                <FormMessage />
               </FormItem>
             )}
           />
-          <br></br>
           <div className="col-span-2 flex justify-center">
             <Button type="submit">Enviar</Button>
           </div>
