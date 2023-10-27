@@ -194,9 +194,7 @@ export default function Page() {
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
-                <FormDescription>
-                  Como te gusta que te llamen o apareces en Whatsapp
-                </FormDescription>
+                <FormDescription>Como te gusta que te llamen</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
