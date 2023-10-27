@@ -23,3 +23,10 @@ export const documentType = sqliteTable("document_type", {
 });
 
 export type DocumentType = InferSelectModel<typeof documentType>;
+
+export const vehicleBrand = sqliteTable("vehicle_brand", {
+  brand: text("brand").notNull(),
+  vehicleType: text("vehicle_type").notNull(),
+});
+
+export type VehicleBrand = InferSelectModel<typeof vehicleBrand>;

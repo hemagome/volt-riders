@@ -184,7 +184,7 @@ export default function Page() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full md:w-2/3 space-y-6 md:grid md:grid-cols-2 md:gap-6"
+          className="w-full md:w-2/3 space-y-6 md:space-y-0 md:grid md:grid-cols-2 md:gap-6"
         >
           <FormField
             control={form.control}
