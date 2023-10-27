@@ -6,7 +6,7 @@ export namespace Label {
   export const DOCUMENT_TYPE: string = "Tipo de documento";
   export const EMERGENCY_CONTACT: string = "Contacto de emergencia";
   export const EPS: string = "EPS";
-  export const JOB: string = "Profesión";
+  export const JOB: string = "Ocupación";
   export const KNOW_US: string = "Conoce la mesa de trabajo";
   export const NAME: string = "Nombre completo";
   export const NICKNAME: string = "Apodo";
