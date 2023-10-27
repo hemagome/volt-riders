@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { use, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useSWRImmutable from "swr/immutable";
@@ -148,6 +148,7 @@ export default function Page() {
 
   const fileRef = form.register("file", { required: true });
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [epsOpen, setEpsOpen] = useState(false);
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
       title: "You submitted the following values:",
@@ -159,25 +160,6 @@ export default function Page() {
     });
   }
   {
-    /* <FormField
-            control={form.control}
-            name="firstname"
-            render={({ field }) => (
-              <FormItem className="md:flex md:space-x-4 md:items-center mb-4">
-                <FormLabel className="text-lg font-semibold md:w-1/3">
-                  Nombre
-                </FormLabel>
-                <FormControl className="md:w-2/3">
-                  <Input
-                    className="border rounded-md p-2 w-full md:w-96"
-                    placeholder="Beatriz Aurora"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-600 md:w-2/3" />
-              </FormItem>
-            )}
-          /> */
   }
   return (
     <div className="flex justify-center items-center min-h-screen p-4">
@@ -191,7 +173,7 @@ export default function Page() {
             name="firstname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.NAME}
                 </FormLabel>
                 <FormControl>
@@ -206,7 +188,7 @@ export default function Page() {
             name="nickname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.NICKNAME}
                 </FormLabel>
                 <FormControl>
@@ -224,7 +206,7 @@ export default function Page() {
             name="documentType"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.DOCUMENT_TYPE}
                 </FormLabel>
                 <FormControl>
@@ -256,7 +238,7 @@ export default function Page() {
             name="documentNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.DOCUMENT_NUMBER}
                 </FormLabel>
                 <FormControl>
@@ -271,7 +253,7 @@ export default function Page() {
             name="job"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.JOB}
                 </FormLabel>
                 <FormControl>
@@ -286,7 +268,7 @@ export default function Page() {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.PHONE}
                 </FormLabel>
                 <FormControl>
@@ -301,10 +283,10 @@ export default function Page() {
             name="eps"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.EPS}
                 </FormLabel>
-                <Popover>
+                <Popover open={epsOpen} onOpenChange={setEpsOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
@@ -330,6 +312,7 @@ export default function Page() {
                             key={eps.id}
                             onSelect={() => {
                               form.setValue("eps", eps.id);
+                              setEpsOpen(false);
                             }}
                           >
                             {eps.name}
@@ -356,7 +339,7 @@ export default function Page() {
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.EMERGENCY_CONTACT}
                 </FormLabel>
                 <FormControl>
@@ -371,7 +354,7 @@ export default function Page() {
             name="contactPhone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   Celular contacto
                 </FormLabel>
                 <FormControl>
@@ -386,7 +369,7 @@ export default function Page() {
             name="rh"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.RH}
                 </FormLabel>
                 <FormControl>
@@ -418,7 +401,7 @@ export default function Page() {
             name="birthdate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.BIRTHDATE}
                 </FormLabel>
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
@@ -467,7 +450,7 @@ export default function Page() {
             name="vehicleType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   {Label.VEHICLE_TYPE}
                 </FormLabel>
                 <FormControl>
@@ -494,7 +477,7 @@ export default function Page() {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   Cómo te enteraste del club?
                 </FormLabel>
                 <FormControl>
@@ -516,7 +499,7 @@ export default function Page() {
             name="file"
             render={({ field }) => (
               <FormItem className="grid w-full max-w-sm items-center gap-1.5">
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
                   Factura
                 </FormLabel>
                 <FormControl>
