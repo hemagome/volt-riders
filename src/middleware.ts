@@ -5,6 +5,8 @@ export default authMiddleware({
     "/",
     "/about-us",
     "/api/document",
+    "/api/edgestore/init",
+    "/api/edgestore/request-upload",
     "/api/eps",
     "/sign-up",
     "/weather",

@@ -1,10 +1,5 @@
 "use client";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import useSWRImmutable from "swr/immutable";
 import * as z from "zod";
-import { Label } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -17,9 +12,9 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { format } from "date-fns";
 import { Eps, DocumentType, VehicleBrand } from "@/lib/schema";
 import es from "date-fns/locale/es";
+import { format } from "date-fns";
 import {
   Form,
   FormControl,
@@ -29,6 +24,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/lib/constants";
+import {
+  MultiFileDropzone,
+  type FileState,
+} from "@/components/MultiFileDropzone";
 import {
   Popover,
   PopoverContent,
@@ -41,9 +42,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { useEdgeStore } from "@/lib/edgestore";
+import { useForm } from "react-hook-form";
+import useSWRImmutable from "swr/immutable";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const FormSchema = z.object({
   firstname: z
@@ -142,12 +147,27 @@ export default function Page() {
   );
   const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>("/api/brand");
+  const { edgestore } = useEdgeStore();
+  const [fileStates, setFileStates] = useState<FileState[]>([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  const fileRef = form.register("file", { required: true });
+  function updateFileProgress(key: string, progress: FileState["progress"]) {
+    setFileStates((fileStates) => {
+      const newFileStates = structuredClone(fileStates);
+      const fileState = newFileStates.find(
+        (fileState) => fileState.key === key
+      );
+      if (fileState) {
+        fileState.progress = progress;
+      }
+      return newFileStates;
+    });
+  }
+
+  // const fileRef = form.register("file", { required: true });
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [epsOpen, setEpsOpen] = useState(false);
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -493,7 +513,7 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="file"
             render={({ field }) => (
@@ -504,9 +524,10 @@ export default function Page() {
                 <FormControl>
                   <Input
                     type="file"
-                    accept="application/pdf"
                     className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    {...fileRef}
+                    onChange={(e) => {
+                      setFile(e.target.files?.[0]);
+                    }}
                   />
                 </FormControl>
                 <FormDescription>
@@ -516,7 +537,44 @@ export default function Page() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
+          <div>
+            <MultiFileDropzone
+              value={fileStates}
+              onChange={(files) => {
+                setFileStates(files);
+              }}
+              onFilesAdded={async (addedFiles) => {
+                setFileStates([...fileStates, ...addedFiles]);
+                await Promise.all(
+                  addedFiles.map(async (addedFileState) => {
+                    try {
+                      const res = await edgestore.publicFiles.upload({
+                        file: addedFileState.file,
+                        options: {
+                          temporary: true,
+                        },
+                        onProgressChange: async (progress) => {
+                          updateFileProgress(addedFileState.key, progress);
+                          if (progress === 100) {
+                            // wait 1 second to set it to complete
+                            // so that the user can see the progress bar at 100%
+                            await new Promise((resolve) =>
+                              setTimeout(resolve, 1000)
+                            );
+                            updateFileProgress(addedFileState.key, "COMPLETE");
+                          }
+                        },
+                      });
+                      console.log(res);
+                    } catch (err) {
+                      updateFileProgress(addedFileState.key, "ERROR");
+                    }
+                  })
+                );
+              }}
+            />
+          </div>
           <FormField
             control={form.control}
             name="terms"
