@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { esES } from "@clerk/localizations";
+import { EdgeStoreProvider } from "../lib/edgestore";
 import { Inter } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -32,7 +33,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />
-            {children}
+            <EdgeStoreProvider>{children}</EdgeStoreProvider>
             <Toaster />
           </ThemeProvider>
           <Analytics />
