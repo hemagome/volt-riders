@@ -1,5 +1,5 @@
 "use client";
-import { use, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useSWRImmutable from "swr/immutable";
@@ -18,7 +18,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { format } from "date-fns";
-import { Eps, DocumentType } from "@/lib/schema";
+import { Eps, DocumentType, VehicleBrand } from "@/lib/schema";
 import es from "date-fns/locale/es";
 import {
   Form,
@@ -136,11 +136,12 @@ const FormSchema = z.object({
 const locale = es;
 
 export default function Page() {
-  const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
   const { data: documentTypeList } = useSWRImmutable<DocumentType[]>(
     "/api/document",
     fetcher
   );
+  const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
+  const { data: brandList } = useSWRImmutable<VehicleBrand[]>("/api/brand");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
