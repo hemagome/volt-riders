@@ -46,7 +46,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import useSWRImmutable from "swr/immutable";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -127,15 +127,15 @@ const FormSchema = z.object({
     .refine((value) => value === true, {
       message: "Se requiere aceptar términos y condiciones",
     }),
-  file: z
-    .any()
-    .refine((file) => file?.length == 1, "Factura es requerida")
-    .refine(
-      (file) => file[0]?.type === "application/pdf",
-      "La factura debe encontrarse en PDF"
+  vehicles: z
+    .array(
+      z.object({
+        file: z.any(),
+        vehicleType: z.string({ required_error: "Tipo de vehículo requerido" }),
+        brand: z.string({ required_error: "Marca de vehículo requerida" }),
+      })
     )
-    .refine((file) => file[0]?.size <= 4500000, "El tamaño máximo es 4.5MB"),
-  vehicleType: z.string({ required_error: "Tipo de vehículo requerido" }),
+    .nonempty({ message: "Vehículo es requerido" }),
 });
 
 const locale = es;
@@ -152,6 +152,12 @@ export default function Page() {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    mode: "onBlur",
+  });
+
+  const { fields, append } = useFieldArray({
+    name: "vehicles",
+    control: form.control,
   });
 
   function updateFileProgress(key: string, progress: FileState["progress"]) {
@@ -167,7 +173,6 @@ export default function Page() {
     });
   }
 
-  // const fileRef = form.register("file", { required: true });
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [epsOpen, setEpsOpen] = useState(false);
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -229,10 +234,7 @@ export default function Page() {
                   {Label.DOCUMENT_TYPE}
                 </FormLabel>
                 <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    // defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange}>
                     <SelectTrigger className="md:w-[230px] sm:w-[380px]">
                       <SelectValue />
                     </SelectTrigger>
@@ -466,33 +468,6 @@ export default function Page() {
           />
           <FormField
             control={form.control}
-            name="vehicleType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.VEHICLE_TYPE}
-                </FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="md:w-[230px] sm:w-[380px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Patineta">Patineta</SelectItem>
-                      <SelectItem value="Rueda">Rueda</SelectItem>
-                      <SelectItem value="Moto">Moto</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="bio"
             render={({ field }) => (
               <FormItem>
@@ -513,68 +488,139 @@ export default function Page() {
               </FormItem>
             )}
           />
-          {/* <FormField
+          <div>
+            {fields.map((_, index) => {
+              return (
+                <div key={index}>
+                  <div className="mt-7 mb-2 text-xl font-bold">
+                    {form.getValues(`vehicles.${index}.file.name`)}
+                  </div>
+                  <div className="flex gap-x-3">
+                    <FormField
+                      control={form.control}
+                      name={`vehicles.${index}.vehicleType`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                            {Label.VEHICLE_TYPE}
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="md:w-[230px] sm:w-[380px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Patineta">
+                                  Patineta
+                                </SelectItem>
+                                <SelectItem value="Rueda">Rueda</SelectItem>
+                                <SelectItem value="Moto">Moto</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      key={index + 1}
+                      name={`vehicles.${index}.brand`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Marca de vehículo</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500 capitalize" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <FormField
             control={form.control}
-            name="file"
-            render={({ field }) => (
-              <FormItem className="grid w-full max-w-sm items-center gap-1.5">
+            name="vehicles"
+            render={() => (
+              <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  Factura
+                  {Label.INVOICE}
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    onChange={(e) => {
-                      setFile(e.target.files?.[0]);
+                  <MultiFileDropzone
+                    value={fileStates}
+                    dropzoneOptions={{
+                      maxFiles: 2,
+                      accept: {
+                        "application/pdf": [".pdf"],
+                        "image/*": [".png", ".jpeg", ".jpg"],
+                      },
+                    }}
+                    onChange={(files) => {
+                      setFileStates(files);
+                    }}
+                    onFilesAdded={async (addedFiles) => {
+                      addedFiles.map((acceptedFile) => {
+                        return append({
+                          file: acceptedFile,
+                          vehicleType: "",
+                          brand: "",
+                        });
+                      });
+                      setFileStates([...fileStates, ...addedFiles]);
+                      await Promise.all(
+                        addedFiles.map(async (addedFileState) => {
+                          try {
+                            const res = await edgestore.publicFiles.upload({
+                              file: addedFileState.file,
+                              options: {
+                                temporary: true,
+                              },
+                              onProgressChange: async (progress) => {
+                                updateFileProgress(
+                                  addedFileState.key,
+                                  progress
+                                );
+                                if (progress === 100) {
+                                  // wait 1 second to set it to complete
+                                  // so that the user can see the progress bar at 100%
+                                  await new Promise((resolve) =>
+                                    setTimeout(resolve, 1000)
+                                  );
+                                  updateFileProgress(
+                                    addedFileState.key,
+                                    "COMPLETE"
+                                  );
+                                }
+                              },
+                            });
+                            console.log(res);
+                          } catch (err) {
+                            updateFileProgress(addedFileState.key, "ERROR");
+                          }
+                        })
+                      );
                     }}
                   />
                 </FormControl>
                 <FormDescription>
-                  En caso de que la factura no se encuentre a tu nombre, sube
-                  una declaración juramentada indicando que es de tu propiedad
+                  En caso de que la factura no se encuentre a tu nombre, súbela
+                  <a href="https://www.ilovepdf.com/merge_pdf" target="_blank">
+                    en un mismo archivo
+                  </a>
+                  junto a una declaración juramentada indicando que es de tu
+                  propiedad
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
-          <div>
-            <MultiFileDropzone
-              value={fileStates}
-              onChange={(files) => {
-                setFileStates(files);
-              }}
-              onFilesAdded={async (addedFiles) => {
-                setFileStates([...fileStates, ...addedFiles]);
-                await Promise.all(
-                  addedFiles.map(async (addedFileState) => {
-                    try {
-                      const res = await edgestore.publicFiles.upload({
-                        file: addedFileState.file,
-                        options: {
-                          temporary: true,
-                        },
-                        onProgressChange: async (progress) => {
-                          updateFileProgress(addedFileState.key, progress);
-                          if (progress === 100) {
-                            // wait 1 second to set it to complete
-                            // so that the user can see the progress bar at 100%
-                            await new Promise((resolve) =>
-                              setTimeout(resolve, 1000)
-                            );
-                            updateFileProgress(addedFileState.key, "COMPLETE");
-                          }
-                        },
-                      });
-                      console.log(res);
-                    } catch (err) {
-                      updateFileProgress(addedFileState.key, "ERROR");
-                    }
-                  })
-                );
-              }}
-            />
-          </div>
+          />
           <FormField
             control={form.control}
             name="terms"

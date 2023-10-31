@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { esES } from "@clerk/localizations";
 import { EdgeStoreProvider } from "../lib/edgestore";
+import { GeistSans, GeistMono } from "geist/font";
 import { Inter } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -23,7 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider localization={esES}>
-      <html lang="es" suppressHydrationWarning>
+      <html
+        lang="es"
+        className={`${GeistSans.variable} ${GeistMono.variable}`}
+        suppressHydrationWarning
+      >
         <head />
         <body className={inter.className}>
           <ThemeProvider
