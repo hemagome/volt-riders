@@ -1,8 +1,13 @@
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  integer,
+  sqliteTable,
+  text,
+  primaryKey,
+} from "drizzle-orm/sqlite-core";
 import { InferSelectModel } from "drizzle-orm";
 
 export const eps = sqliteTable("eps", {
-  id: text("id").primaryKey(),
+  nit: text("nit").primaryKey(),
   name: text("name").notNull(),
 });
 
@@ -24,9 +29,24 @@ export const documentType = sqliteTable("document_type", {
 
 export type DocumentType = InferSelectModel<typeof documentType>;
 
-export const vehicleBrand = sqliteTable("vehicle_brand", {
-  brand: text("brand").notNull(),
-  vehicleType: text("vehicle_type").notNull(),
-});
+export const vehicleBrand = sqliteTable(
+  "vehicle_brand",
+  {
+    brand: text("brand").notNull(),
+    vehicleType: integer("vehicle_type").references(() => vehicleType.id),
+  },
+  (vehicle) => {
+    return {
+      pk: primaryKey(vehicle.brand, vehicle.vehicleType),
+    };
+  }
+);
 
 export type VehicleBrand = InferSelectModel<typeof vehicleBrand>;
+
+export const vehicleType = sqliteTable("vehicle_type", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  type: text("type").notNull(),
+});
+
+export type VehicleType = InferSelectModel<typeof vehicleType>;

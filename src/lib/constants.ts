@@ -13,6 +13,7 @@ export namespace Label {
   export const NICKNAME: string = "Apodo";
   export const PHONE: string = "Celular";
   export const RH: string = "RH";
+  export const VEHICLE_BRAND: string = "Marca de vehículo";
   export const VEHICLE_TYPE: string = "Tipo de vehículo";
 
   //Color Labels

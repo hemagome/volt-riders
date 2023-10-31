@@ -8,6 +8,8 @@ export default authMiddleware({
     "/api/edgestore/init",
     "/api/edgestore/request-upload",
     "/api/eps",
+    "/api/vehicle/brand",
+    "/api/vehicle/type",
     "/sign-up",
     "/weather",
   ],

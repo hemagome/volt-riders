@@ -12,7 +12,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { Eps, DocumentType, VehicleBrand } from "@/lib/schema";
+import { Eps, DocumentType, VehicleBrand, VehicleType } from "@/lib/schema";
 import es from "date-fns/locale/es";
 import { format } from "date-fns";
 import {
@@ -141,14 +141,27 @@ const FormSchema = z.object({
 const locale = es;
 
 export default function Page() {
+  const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
+    "/api/vehicle/brand",
+    fetcher
+  );
   const { data: documentTypeList } = useSWRImmutable<DocumentType[]>(
     "/api/document",
     fetcher
   );
   const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
-  const { data: brandList } = useSWRImmutable<VehicleBrand[]>("/api/brand");
+  const { data: vehicleTypeList } = useSWRImmutable<VehicleType[]>(
+    "/api/vehicle/type",
+    fetcher
+  );
   const { edgestore } = useEdgeStore();
   const [fileStates, setFileStates] = useState<FileState[]>([]);
+  const [selectedVehicleType, setSelectedVehicleType] = useState(""); // Estado local para el vehicleType seleccionado
+
+  // Filtrar brandList según el vehicleType seleccionado
+  const filteredBrandList = brandList?.filter(
+    (brand) => brand.vehicleType?.toString() === selectedVehicleType
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -318,7 +331,7 @@ export default function Page() {
                       )}
                     >
                       {field.value
-                        ? epsList?.find((eps) => eps.id === field.value)?.name
+                        ? epsList?.find((eps) => eps.nit === field.value)?.name
                         : "Seleccione EPS"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -330,9 +343,9 @@ export default function Page() {
                       <CommandGroup>
                         {epsList?.map((eps) => (
                           <CommandItem
-                            key={eps.id}
+                            key={eps.nit}
                             onSelect={() => {
-                              form.setValue("eps", eps.id);
+                              form.setValue("eps", eps.nit);
                               setEpsOpen(false);
                             }}
                           >
@@ -340,7 +353,7 @@ export default function Page() {
                             <CheckIcon
                               className={cn(
                                 "ml-auto h-4 w-4",
-                                eps.id === field.value
+                                eps.nit === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -506,18 +519,23 @@ export default function Page() {
                           </FormLabel>
                           <FormControl>
                             <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                setSelectedVehicleType(value);
+                              }}
                             >
                               <SelectTrigger className="md:w-[230px] sm:w-[380px]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="Patineta">
-                                  Patineta
-                                </SelectItem>
-                                <SelectItem value="Rueda">Rueda</SelectItem>
-                                <SelectItem value="Moto">Moto</SelectItem>
+                                {vehicleTypeList?.map((vehicleType) => (
+                                  <SelectItem
+                                    value={vehicleType.id.toString()}
+                                    key={vehicleType.id}
+                                  >
+                                    {vehicleType.type}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -531,9 +549,28 @@ export default function Page() {
                       name={`vehicles.${index}.brand`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Marca de vehículo</FormLabel>
+                          <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                            {Label.VEHICLE_BRAND}
+                          </FormLabel>
                           <FormControl>
-                            <Input {...field} />
+                            <Select
+                              onValueChange={field.onChange}
+                              disabled={!selectedVehicleType}
+                            >
+                              <SelectTrigger className="md:w-[230px] sm:w-[380px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {filteredBrandList?.map((brand) => (
+                                  <SelectItem
+                                    value={brand.brand}
+                                    key={brand.brand}
+                                  >
+                                    {brand.brand}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </FormControl>
                           <FormMessage className="text-red-500 capitalize" />
                         </FormItem>
