@@ -39,7 +39,7 @@ export const vehicleBrand = sqliteTable(
     return {
       pk: primaryKey(vehicle.brand, vehicle.vehicleType),
     };
-  }
+  },
 );
 
 export type VehicleBrand = InferSelectModel<typeof vehicleBrand>;

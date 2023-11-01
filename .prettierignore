@@ -1,0 +1,10 @@
+# Ignore artifacts:
+build
+coverage
+
+# Ignore pnpfiles:
+**/*.html
+**/.git
+**/.svn
+**/.hg
+**/node_modules

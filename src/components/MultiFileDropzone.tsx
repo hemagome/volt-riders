@@ -38,7 +38,7 @@ type InputProps = {
 const ERROR_MESSAGES = {
   fileTooLarge(maxSize: number) {
     return `El archivo es muy grande. Tamaño máximo es ${formatFileSize(
-      maxSize
+      maxSize,
     )}.`;
   },
   fileInvalidType() {
@@ -55,7 +55,7 @@ const ERROR_MESSAGES = {
 const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
   (
     { dropzoneOptions, value, className, disabled, onFilesAdded, onChange },
-    ref
+    ref,
   ) => {
     const [customError, setCustomError] = React.useState<string>();
     if (dropzoneOptions?.maxFiles && value?.length) {
@@ -103,7 +103,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           disabled && variants.disabled,
           (isDragReject ?? fileRejections[0]) && variants.reject,
           isDragAccept && variants.accept,
-          className
+          className,
         ).trim(),
       [
         isFocused,
@@ -112,7 +112,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         isDragReject,
         disabled,
         className,
-      ]
+      ],
     );
 
     // error validation messages
@@ -134,7 +134,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-6">
           <div>
             {/* Main File Input */}
             <div
@@ -146,7 +146,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
               <div className="flex flex-col items-center justify-center text-xs text-gray-400">
                 <UploadCloudIcon className="mb-1 h-7 w-7" />
                 <div className="text-gray-400">
-                  Arrastre y suelte o haga click para subir
+                  Arrastre o haga click para subir
                 </div>
               </div>
             </div>
@@ -161,7 +161,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           {value?.map(({ file, progress }, i) => (
             <div
               key={i}
-              className="flex h-16 w-96 max-w-[100vw] flex-col justify-center rounded border border-gray-300 px-4 py-2"
+              className="flex h-16 md:w-[230px] sm:w-[380px] flex-col justify-center rounded border border-gray-300 px-4 py-2"
             >
               <div className="flex items-center gap-2 text-gray-500 dark:text-white">
                 <FileIcon size="30" className="shrink-0" />
@@ -180,7 +180,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
                       className="rounded-md p-1 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                       onClick={() => {
                         void onChange?.(
-                          value.filter((_, index) => index !== i)
+                          value.filter((_, index) => index !== i),
                         );
                       }}
                     >
@@ -213,7 +213,7 @@ const MultiFileDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 MultiFileDropzone.displayName = "MultiFileDropzone";
 

@@ -131,9 +131,13 @@ const FormSchema = z.object({
     .array(
       z.object({
         file: z.any(),
-        vehicleType: z.string({ required_error: "Tipo de vehículo requerido" }),
-        brand: z.string({ required_error: "Marca de vehículo requerida" }),
-      })
+        vehicleType: z
+          .string({ required_error: "Tipo de vehículo requerido" })
+          .min(1, { message: "Tipo de vehículo requerido" }),
+        brand: z
+          .string({ required_error: "Marca de vehículo requerida" })
+          .min(1, { message: "Marca de vehículo requerida" }),
+      }),
     )
     .nonempty({ message: "Vehículo es requerido" }),
 });
@@ -143,25 +147,21 @@ const locale = es;
 export default function Page() {
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
-    fetcher
+    fetcher,
   );
   const { data: documentTypeList } = useSWRImmutable<DocumentType[]>(
     "/api/document",
-    fetcher
+    fetcher,
   );
   const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
   const { data: vehicleTypeList } = useSWRImmutable<VehicleType[]>(
     "/api/vehicle/type",
-    fetcher
+    fetcher,
   );
   const { edgestore } = useEdgeStore();
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   const [selectedVehicleType, setSelectedVehicleType] = useState(""); // Estado local para el vehicleType seleccionado
-
-  // Filtrar brandList según el vehicleType seleccionado
-  const filteredBrandList = brandList?.filter(
-    (brand) => brand.vehicleType?.toString() === selectedVehicleType
-  );
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]); // Estado para almacenar las marcas seleccionadas
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -177,7 +177,7 @@ export default function Page() {
     setFileStates((fileStates) => {
       const newFileStates = structuredClone(fileStates);
       const fileState = newFileStates.find(
-        (fileState) => fileState.key === key
+        (fileState) => fileState.key === key,
       );
       if (fileState) {
         fileState.progress = progress;
@@ -327,7 +327,7 @@ export default function Page() {
                       role="combobox"
                       className={cn(
                         "md:w-[230px] sm:w-[380px] justify-between",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                     >
                       {field.value
@@ -355,7 +355,7 @@ export default function Page() {
                                 "ml-auto h-4 w-4",
                                 eps.nit === field.value
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>
@@ -445,7 +445,7 @@ export default function Page() {
                         variant={"outline"}
                         className={cn(
                           "md:w-[230px] sm:w-[380px] pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value ? (
@@ -501,86 +501,6 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <div>
-            {fields.map((_, index) => {
-              return (
-                <div key={index}>
-                  <div className="mt-7 mb-2 text-xl font-bold">
-                    {form.getValues(`vehicles.${index}.file.name`)}
-                  </div>
-                  <div className="flex gap-x-3">
-                    <FormField
-                      control={form.control}
-                      name={`vehicles.${index}.vehicleType`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                            {Label.VEHICLE_TYPE}
-                          </FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                                setSelectedVehicleType(value);
-                              }}
-                            >
-                              <SelectTrigger className="md:w-[230px] sm:w-[380px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {vehicleTypeList?.map((vehicleType) => (
-                                  <SelectItem
-                                    value={vehicleType.id.toString()}
-                                    key={vehicleType.id}
-                                  >
-                                    {vehicleType.type}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      key={index + 1}
-                      name={`vehicles.${index}.brand`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                            {Label.VEHICLE_BRAND}
-                          </FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              disabled={!selectedVehicleType}
-                            >
-                              <SelectTrigger className="md:w-[230px] sm:w-[380px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {filteredBrandList?.map((brand) => (
-                                  <SelectItem
-                                    value={brand.brand}
-                                    key={brand.brand}
-                                  >
-                                    {brand.brand}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage className="text-red-500 capitalize" />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
           <FormField
             control={form.control}
             name="vehicles"
@@ -591,6 +511,7 @@ export default function Page() {
                 </FormLabel>
                 <FormControl>
                   <MultiFileDropzone
+                    className="md:w-[230px] sm:w-[380px]"
                     value={fileStates}
                     dropzoneOptions={{
                       maxFiles: 2,
@@ -622,17 +543,17 @@ export default function Page() {
                               onProgressChange: async (progress) => {
                                 updateFileProgress(
                                   addedFileState.key,
-                                  progress
+                                  progress,
                                 );
                                 if (progress === 100) {
                                   // wait 1 second to set it to complete
                                   // so that the user can see the progress bar at 100%
                                   await new Promise((resolve) =>
-                                    setTimeout(resolve, 1000)
+                                    setTimeout(resolve, 1000),
                                   );
                                   updateFileProgress(
                                     addedFileState.key,
-                                    "COMPLETE"
+                                    "COMPLETE",
                                   );
                                 }
                               },
@@ -641,23 +562,121 @@ export default function Page() {
                           } catch (err) {
                             updateFileProgress(addedFileState.key, "ERROR");
                           }
-                        })
+                        }),
                       );
                     }}
                   />
                 </FormControl>
-                <FormDescription>
-                  En caso de que la factura no se encuentre a tu nombre, súbela
+                <FormDescription className="md:w-[230px] sm:w-[380px]">
                   <a href="https://www.ilovepdf.com/merge_pdf" target="_blank">
-                    en un mismo archivo
+                    En caso de que la factura no se encuentre a tu nombre,
+                    súbela en un mismo archivo junto a una declaración
+                    juramentada indicando que es de tu propiedad
                   </a>
-                  junto a una declaración juramentada indicando que es de tu
-                  propiedad
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <div>
+            <br className="hidden md:block" />
+            <br className="hidden md:block" />
+            <br className="hidden md:block" />
+            <br className="hidden md:block" />
+            {fields.map((field, index) => {
+              const selectedBrand = selectedBrands[index] || "";
+              const vehicleTypeValue = form.getValues(
+                `vehicles.${index}.vehicleType`,
+              );
+              const filteredBrandList = brandList?.filter(
+                (brand) => brand.vehicleType?.toString() === vehicleTypeValue,
+              );
+              return (
+                <div key={field.id}>
+                  <div className="mt-7 mb-2 text-xl font-bold">
+                    {form.getValues(`vehicles.${index}.file.name`)}
+                  </div>
+                  <div className="flex gap-x-8">
+                    <FormField
+                      control={form.control}
+                      name={`vehicles.${index}.vehicleType`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="md:w-1/3 text-gray-900">
+                            {Label.VEHICLE_TYPE}
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                setSelectedVehicleType(value);
+                              }}
+                            >
+                              <SelectTrigger className="md:w-[150px] sm:w-[380px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {vehicleTypeList?.map((vehicleType) => (
+                                  <SelectItem
+                                    value={vehicleType.id.toString()}
+                                    key={vehicleType.id}
+                                  >
+                                    {vehicleType.type}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      key={field.id + 1}
+                      name={`vehicles.${index}.brand`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="md:w-1/3 text-gray-900">
+                            {Label.VEHICLE_BRAND}
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                setSelectedBrands((brands) => {
+                                  const updatedBrands = [...brands];
+                                  updatedBrands[index] = value;
+                                  return updatedBrands;
+                                });
+                              }}
+                              disabled={!selectedVehicleType}
+                              value={field.value || selectedBrand}
+                            >
+                              <SelectTrigger className="md:w-[200px] sm:w-[380px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {filteredBrandList?.map((brand) => (
+                                  <SelectItem
+                                    value={brand.brand}
+                                    key={brand.brand}
+                                  >
+                                    {brand.brand}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           <FormField
             control={form.control}
             name="terms"
