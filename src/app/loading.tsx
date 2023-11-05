@@ -1,3 +1,18 @@
 export default function Loading() {
-  return <p>Cagando</p>;
+  return (
+    <>
+      <div className="flex justify-center items-center h-screen">
+        <div className="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </>
+  );
 }
