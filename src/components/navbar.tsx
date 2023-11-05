@@ -60,9 +60,10 @@ export function Navbar() {
             <Image
               src="/VoltRiders.webp"
               alt="Logo VoltRiders"
-              width={100}
-              height={24}
+              width={60}
+              height={0}
               priority
+              className="w-full h-auto"
             />
           </Link>
           <div className="md:hidden flex items-center">
