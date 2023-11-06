@@ -1,33 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { HamburgerMenuIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
-import { FacebookIcon } from "lucide-react";
+import { FacebookIcon, InstagramIcon, MenuIcon, Moon, Sun } from "lucide-react";
 import Image from "next/image";
 import { Menu, Label } from "@/lib/constants";
 import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
-import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import { useUser } from "@clerk/nextjs";
+import { useUser, UserButton } from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserButton } from "@clerk/nextjs";
 
 export function Navbar() {
   const [state, setState] = useState(false);
@@ -70,7 +56,7 @@ export function Navbar() {
             <a href="https://www.instagram.com/voltriderscol/" target="_blank">
               <Button variant="outline" size="icon">
                 {" "}
-                <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
+                <InstagramIcon className="h-[1.2rem] w-[1.2rem]" />
               </Button>
             </a>
             <a
@@ -109,7 +95,7 @@ export function Navbar() {
               onClick={() => setState(!state)}
             >
               {" "}
-              <HamburgerMenuIcon />
+              <MenuIcon />
             </Button>
             <Button variant="link" size="icon">
               <UserButton afterSignOutUrl="/" />
@@ -138,7 +124,7 @@ export function Navbar() {
           <a href="https://www.instagram.com/voltriderscol/" target="_blank">
             <Button variant="outline" size="icon">
               {" "}
-              <InstagramLogoIcon className="h-[1.2rem] w-[1.2rem]" />
+              <InstagramIcon className="h-[1.2rem] w-[1.2rem]" />
             </Button>
           </a>
           <a

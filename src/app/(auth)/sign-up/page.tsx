@@ -2,7 +2,7 @@
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CalendarDaysIcon, ChevronsUpDownIcon, CheckIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn, fetcher } from "@/lib/utils";
 import {
@@ -333,7 +333,7 @@ export default function Page() {
                       {field.value
                         ? epsList?.find((eps) => eps.nit === field.value)?.name
                         : "Seleccione EPS"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="md:w-[230px] sm:w-[380px] p-0">
@@ -453,7 +453,7 @@ export default function Page() {
                         ) : (
                           <span>Selecciona una fecha</span>
                         )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
