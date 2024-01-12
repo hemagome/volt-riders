@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@clerk/localizations": "^1.26.8",
-    "@clerk/nextjs": "^4.26.2",
+    "@clerk/nextjs": "^4.29.3",
     "@clerk/themes": "^1.7.9",
     "@edgestore/react": "^0.1.4",
     "@edgestore/server": "^0.1.4",
