@@ -1,21 +1,43 @@
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { authMiddleware } from "@clerk/nextjs";
+import createMiddleware from "next-intl/middleware";
+import { locales } from "./navigation";
+
+const intlMiddleware = createMiddleware({
+  locales: locales,
+  defaultLocale: "es",
+});
 
 export default authMiddleware({
+  beforeAuth(request) {
+    return intlMiddleware(request);
+  },
+  afterAuth(auth, req) {
+    // Extraer el locale del request
+    if (!auth.userId && !auth.isPublicRoute) {
+      const locale = "es";
+      req.nextUrl.pathname = `/${locale}/sign-in`;
+
+      // Redirigir a la ruta deseada después de la autenticación
+      return Response.redirect(req.nextUrl);
+    }
+  },
+
   publicRoutes: [
     "/",
-    "/about-us",
+    "/:locale",
+    "/:locale/about-us",
     "/api/document",
-    "/api/edgestore/init",
-    "/api/edgestore/request-upload",
+    "/api/edgestore/(.*)",
     "/api/eps",
-    "/api/vehicle/brand",
-    "/api/vehicle/type",
-    "/sign-up",
-    "/weather",
+    "/api/vehicle(.*)",
+    "/:locale/sign-up",
+    "/:locale/sign-in",
+    "/:locale/weather",
   ],
-  debug: true,
+  //debug: true,
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/", "/(es|en)/:path*"],
+  //matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

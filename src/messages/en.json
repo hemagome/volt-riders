@@ -1,0 +1,48 @@
+{
+    "Menu":{
+        "aboutUs": "About us",
+        "benefits": "Benefits",
+        "blog": "Blog",
+        "calendar": "Calendar",
+        "dark": "Dark",
+        "light": "Light",
+        "system": "System",
+        "signIn": "Sign in",
+        "signUp": "Sign up",
+        "weatherMap": "Weather map"
+    },
+    "Label":{
+        "agreeTerms": "Agree terms and conditions",
+        "birthdate": "Birthdate",
+        "documentNumber": "Document number",
+        "documentType": "Document type",
+        "emergencyContact": "Emergency contact",
+        "eps": "EPS",
+        "invoice": "Invoice",
+        "job": "Job",
+        "knowUs": "Meet the work table",
+        "name": "Fullname",
+        "nickname": "Nickname",
+        "cellphone": "Cellphone",
+        "contactPhone": "Contact phone",
+        "rh": "RH",
+        "vehicleBrand": "Vehicle brand",
+        "vehicleType": "Vehicle type",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    },
+    "LocaleSwitcher": {
+        "label": "Change language",
+        "locale": "{locale, select, es {🇪🇸} en {🇺🇸} other {Unknown}}"
+    }
+}
+
+
+
+
+
+
+
+
+

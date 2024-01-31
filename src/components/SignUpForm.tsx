@@ -25,7 +25,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/lib/constants";
 import {
   MultiFileDropzone,
   type FileState,
@@ -144,7 +143,42 @@ const FormSchema = z.object({
 
 const locale = es;
 
-export default function Page() {
+interface SignUpFormProps {
+  name: String;
+  nickname: String;
+  documentType: String;
+  documentNumber: String;
+  job: String;
+  cellphone: String;
+  eps: String;
+  emergencyContact: String;
+  contactPhone: String;
+  rh: String;
+  birthdate: String;
+  invoice: String;
+  agreeTerms: String;
+  vehicleType: String;
+  vehicleBrand: String;
+}
+
+export default function SignUpForm(props: SignUpFormProps) {
+  const {
+    name,
+    nickname,
+    documentType,
+    documentNumber,
+    job,
+    cellphone,
+    eps,
+    emergencyContact,
+    contactPhone,
+    rh,
+    birthdate,
+    invoice,
+    agreeTerms,
+    vehicleBrand,
+    vehicleType,
+  } = props;
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
     fetcher,
@@ -190,7 +224,7 @@ export default function Page() {
   const [epsOpen, setEpsOpen] = useState(false);
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
-      title: "You submitted the following values:",
+      title: "Diligenciaste los siguientes datos",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -198,8 +232,7 @@ export default function Page() {
       ),
     });
   }
-  {
-  }
+
   return (
     <div className="flex justify-center items-center min-h-screen p-4">
       <Form {...form}>
@@ -213,7 +246,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.NAME}
+                  {name}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -228,7 +261,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.NICKNAME}
+                  {nickname}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -244,7 +277,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.DOCUMENT_TYPE}
+                  {documentType}
                 </FormLabel>
                 <FormControl>
                   <Select onValueChange={field.onChange}>
@@ -273,7 +306,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.DOCUMENT_NUMBER}
+                  {documentNumber}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -288,7 +321,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.JOB}
+                  {job}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -303,7 +336,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.PHONE}
+                  {cellphone}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -318,7 +351,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.EPS}
+                  {eps}
                 </FormLabel>
                 <Popover open={epsOpen} onOpenChange={setEpsOpen}>
                   <PopoverTrigger asChild>
@@ -374,7 +407,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.EMERGENCY_CONTACT}
+                  {emergencyContact}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -389,7 +422,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  Celular contacto
+                  {contactPhone}
                 </FormLabel>
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
@@ -404,7 +437,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.RH}
+                  {rh}
                 </FormLabel>
                 <FormControl>
                   <Select
@@ -436,7 +469,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.BIRTHDATE}
+                  {birthdate}
                 </FormLabel>
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
@@ -507,7 +540,7 @@ export default function Page() {
             render={() => (
               <FormItem>
                 <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  {Label.INVOICE}
+                  {invoice}
                 </FormLabel>
                 <FormControl>
                   <MultiFileDropzone
@@ -603,7 +636,7 @@ export default function Page() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="md:w-1/3 text-gray-900">
-                            {Label.VEHICLE_TYPE}
+                            {vehicleType}
                           </FormLabel>
                           <FormControl>
                             <Select
@@ -638,7 +671,7 @@ export default function Page() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="md:w-1/3 text-gray-900">
-                            {Label.VEHICLE_BRAND}
+                            {vehicleBrand}
                           </FormLabel>
                           <FormControl>
                             <Select
@@ -676,7 +709,6 @@ export default function Page() {
               );
             })}
           </div>
-
           <FormField
             control={form.control}
             name="terms"
@@ -689,7 +721,7 @@ export default function Page() {
                   />
                 </FormControl>
                 <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  {Label.AGREE_TERMS}
+                  {agreeTerms}
                 </FormLabel>
                 <FormMessage />
               </FormItem>

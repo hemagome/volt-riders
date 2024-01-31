@@ -1,0 +1,39 @@
+{
+    "Menu":{
+        "aboutUs": "Acerca de nosotros",
+        "benefits": "Beneficios",
+        "blog": "Blog",
+        "calendar": "Calendario",
+        "dark": "Oscuro",
+        "light": "Luz",
+        "system": "Sistema",
+        "signIn": "Iniciar sesión",
+        "signUp": "Registrate",
+        "weatherMap": "Mapa clima"
+    },
+    "Label":{
+        "agreeTerms": "Acepta términos y condiciones",
+        "birthdate": "Fecha de nacimiento",
+        "documentNumber": "Número documento",
+        "documentType": "Tipo documento",
+        "emergencyContact": "Contacto de emergencia",
+        "eps": "EPS",
+        "invoice": "Factura",
+        "job": "Ocupación",
+        "knowUs": "Conoce la mesa de trabajo",
+        "name": "Nombre completo",
+        "nickname": "Apodo",
+        "cellphone": "Celular",
+        "contactPhone": "Celular contacto",
+        "rh": "RH",
+        "vehicleBrand": "Marca de vehículo",
+        "vehicleType": "Tipo de vehículo",
+        "light": "Luz",
+        "dark": "Oscuro",
+        "system": "Sistema"
+    },
+    "LocaleSwitcher": {
+        "label": "Cambiar lenguaje",
+        "locale": "{locale, select, es {🇪🇸} en {🇺🇸} other {Desconocido}}"
+    }
+}

@@ -1,5 +1,5 @@
 import { PresentationCard } from "@/components/card";
-import { Label } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 const tableMembers = [
   {
     name: "Camila Narvaez",
@@ -37,11 +37,12 @@ const tableMembers = [
 ];
 
 export default function Page() {
+  const t = useTranslations("Label");
   return (
     <>
       <br />
       <h1 className="text-3xl mb-4 flex flex-col items-center">
-        {Label.KNOW_US}
+        {t("knowUs")}
       </h1>
       <div className="w-screen h-screen flex justify-center p-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">

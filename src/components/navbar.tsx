@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { FacebookIcon, InstagramIcon, MenuIcon, Moon, Sun } from "lucide-react";
 import Image from "next/image";
-import { Menu, Label } from "@/lib/constants";
-import Link from "next/link";
+import { Link } from "../navigation";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { useUser, UserButton } from "@clerk/nextjs";
 import {
   DropdownMenu,
@@ -14,27 +14,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export function Navbar() {
   const [state, setState] = useState(false);
   const { setTheme } = useTheme();
   const { isSignedIn } = useUser();
-
+  const t = useTranslations("Menu");
   const menus = [
     !isSignedIn
-      ? { title: Menu.SIGN_UP, path: "/sign-up" }
+      ? { title: t("signUp"), path: `/sign-up` }
       : { title: "", path: "" },
     !isSignedIn
-      ? { title: Menu.SIGN_IN, path: "/sign-in" }
+      ? { title: t("signIn"), path: "/sign-in" }
       : { title: "", path: "" },
-    { title: Menu.ABOUT_US, path: "/about-us" },
-    { title: Menu.WEATHER_MAP, path: "/weather" },
-    isSignedIn ? { title: Menu.BLOG, path: "/blog" } : { title: "", path: "" },
+    { title: t("aboutUs"), path: "/about-us" },
+    { title: t("weatherMap"), path: "/weather" },
+    isSignedIn ? { title: t("blog"), path: "/blog" } : { title: "", path: "" },
     isSignedIn
-      ? { title: Menu.CALENDAR, path: "/calendar" }
+      ? { title: t("calendar"), path: "/calendar" }
       : { title: "", path: "" },
     isSignedIn
-      ? { title: Menu.BENEFITS, path: "/benefits" }
+      ? { title: t("benefits"), path: "/benefits" }
       : { title: "", path: "" },
   ];
 
@@ -52,7 +53,13 @@ export function Navbar() {
               className="w-full h-auto"
             />
           </Link>
+          {
+            //Sección móvil
+          }
           <div className="md:hidden flex items-center">
+            <Button variant="outline" size="icon">
+              <LocaleSwitcher />
+            </Button>
             <a href="https://www.instagram.com/voltriderscol/" target="_blank">
               <Button variant="outline" size="icon">
                 {" "}
@@ -78,13 +85,13 @@ export function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme("light")}>
-                  {Label.LIGHT}
+                  {t("light")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  {Label.DARK}
+                  {t("dark")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("system")}>
-                  {Label.SYSTEM}
+                  {t("system")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -120,7 +127,13 @@ export function Navbar() {
             ))}
           </ul>
         </div>
+        {
+          // Sección PC
+        }
         <div className="hidden md:block">
+          <Button variant="outline" size="icon">
+            <LocaleSwitcher />
+          </Button>
           <a href="https://www.instagram.com/voltriderscol/" target="_blank">
             <Button variant="outline" size="icon">
               {" "}
@@ -146,13 +159,13 @@ export function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setTheme("light")}>
-                {Label.LIGHT}
+                {t("light")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("dark")}>
-                {Label.DARK}
+                {t("dark")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme("system")}>
-                {Label.SYSTEM}
+                {t("system")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
