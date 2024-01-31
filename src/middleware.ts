@@ -12,7 +12,6 @@ export default authMiddleware({
     return intlMiddleware(request);
   },
   afterAuth(auth, req) {
-    // Extraer el locale del request
     if (!auth.userId && !auth.isPublicRoute) {
       const locale = "es";
       req.nextUrl.pathname = `/${locale}/sign-in`;

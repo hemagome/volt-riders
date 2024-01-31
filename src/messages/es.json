@@ -23,6 +23,7 @@
         "knowUs": "Conoce la mesa de trabajo",
         "name": "Nombre completo",
         "nickname": "Apodo",
+        "nicknameDescription": "Como te gusta que te llamen",
         "cellphone": "Celular",
         "contactPhone": "Celular contacto",
         "rh": "RH",

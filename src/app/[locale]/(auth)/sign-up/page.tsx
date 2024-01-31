@@ -17,6 +17,7 @@ export default function Page() {
       job={t("job")}
       name={t("name")}
       nickname={t("nickname")}
+      nicknameDescription={t("nicknameDescription")}
       rh={t("rh")}
       vehicleBrand={t("vehicleBrand")}
       vehicleType={t("vehicleType")}

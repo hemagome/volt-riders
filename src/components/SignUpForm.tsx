@@ -159,6 +159,7 @@ interface SignUpFormProps {
   agreeTerms: String;
   vehicleType: String;
   vehicleBrand: String;
+  nicknameDescription: String;
 }
 
 export default function SignUpForm(props: SignUpFormProps) {
@@ -178,6 +179,7 @@ export default function SignUpForm(props: SignUpFormProps) {
     agreeTerms,
     vehicleBrand,
     vehicleType,
+    nicknameDescription,
   } = props;
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
@@ -266,7 +268,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                 <FormControl>
                   <Input className="md:w-[230px] sm:w-[380px]" {...field} />
                 </FormControl>
-                <FormDescription>Como te gusta que te llamen</FormDescription>
+                <FormDescription>{nicknameDescription}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

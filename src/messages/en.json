@@ -23,6 +23,7 @@
         "knowUs": "Meet the work table",
         "name": "Fullname",
         "nickname": "Nickname",
+        "nicknameDescription": "As you like to be called",
         "cellphone": "Cellphone",
         "contactPhone": "Contact phone",
         "rh": "RH",
