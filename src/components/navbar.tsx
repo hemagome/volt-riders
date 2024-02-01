@@ -20,7 +20,7 @@ export function Navbar() {
   const [state, setState] = useState(false);
   const { setTheme } = useTheme();
   const { isSignedIn } = useUser();
-  const t = useTranslations("Menu");
+  const t = useTranslations("Navbar");
   const menus = [
     !isSignedIn
       ? { title: t("signUp"), path: `/sign-up` }

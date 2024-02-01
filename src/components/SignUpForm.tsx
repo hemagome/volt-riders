@@ -144,22 +144,30 @@ const FormSchema = z.object({
 const locale = es;
 
 interface SignUpFormProps {
-  name: String;
-  nickname: String;
-  documentType: String;
-  documentNumber: String;
-  job: String;
-  cellphone: String;
-  eps: String;
-  emergencyContact: String;
-  contactPhone: String;
-  rh: String;
-  birthdate: String;
-  invoice: String;
-  agreeTerms: String;
-  vehicleType: String;
-  vehicleBrand: String;
-  nicknameDescription: String;
+  name: string;
+  nickname: string;
+  documentType: string;
+  documentNumber: string;
+  job: string;
+  cellphone: string;
+  eps: string;
+  emergencyContact: string;
+  contactPhone: string;
+  rh: string;
+  birthdate: string;
+  invoice: string;
+  agreeTerms: string;
+  vehicleType: string;
+  vehicleBrand: string;
+  nicknameDescription: string;
+  selectEps: string;
+  howKnowUs: string;
+  submit: string;
+  dragDrop: string;
+  referMessage: string;
+  aboutYou: string;
+  selectDate: string;
+  invoiceDescription: string;
 }
 
 export default function SignUpForm(props: SignUpFormProps) {
@@ -180,6 +188,14 @@ export default function SignUpForm(props: SignUpFormProps) {
     vehicleBrand,
     vehicleType,
     nicknameDescription,
+    selectEps,
+    howKnowUs,
+    submit,
+    dragDrop,
+    referMessage,
+    aboutYou,
+    selectDate,
+    invoiceDescription,
   } = props;
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
@@ -247,7 +263,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="firstname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {name}
                 </FormLabel>
                 <FormControl>
@@ -262,7 +278,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="nickname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {nickname}
                 </FormLabel>
                 <FormControl>
@@ -278,7 +294,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="documentType"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {documentType}
                 </FormLabel>
                 <FormControl>
@@ -307,7 +323,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="documentNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {documentNumber}
                 </FormLabel>
                 <FormControl>
@@ -322,7 +338,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="job"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {job}
                 </FormLabel>
                 <FormControl>
@@ -337,7 +353,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {cellphone}
                 </FormLabel>
                 <FormControl>
@@ -352,7 +368,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="eps"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {eps}
                 </FormLabel>
                 <Popover open={epsOpen} onOpenChange={setEpsOpen}>
@@ -367,7 +383,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                     >
                       {field.value
                         ? epsList?.find((eps) => eps.nit === field.value)?.name
-                        : "Seleccione EPS"}
+                        : selectEps}
                       <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -408,7 +424,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {emergencyContact}
                 </FormLabel>
                 <FormControl>
@@ -423,7 +439,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="contactPhone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {contactPhone}
                 </FormLabel>
                 <FormControl>
@@ -438,7 +454,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="rh"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {rh}
                 </FormLabel>
                 <FormControl>
@@ -470,7 +486,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="birthdate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {birthdate}
                 </FormLabel>
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
@@ -486,7 +502,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                         {field.value ? (
                           format(new Date(field.value), "PPP", { locale })
                         ) : (
-                          <span>Selecciona una fecha</span>
+                          <span>{selectDate}</span>
                         )}
                         <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -519,19 +535,17 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
-                  Cómo te enteraste del club?
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                  {howKnowUs}
                 </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Cuentanos un poco acerca de ti"
+                    placeholder={aboutYou}
                     className="resize-y"
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  Puedes mencionar si alguien te referencio
-                </FormDescription>
+                <FormDescription>{referMessage}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -541,11 +555,12 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="vehicles"
             render={() => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900">
+                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
                   {invoice}
                 </FormLabel>
                 <FormControl>
                   <MultiFileDropzone
+                    messages={{ dragDrop: dragDrop }}
                     className="md:w-[230px] sm:w-[380px]"
                     value={fileStates}
                     dropzoneOptions={{
@@ -581,8 +596,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                                   progress,
                                 );
                                 if (progress === 100) {
-                                  // wait 1 second to set it to complete
-                                  // so that the user can see the progress bar at 100%
+                                  // Esperar 1 segundo a setear barra de progreso a 100%
                                   await new Promise((resolve) =>
                                     setTimeout(resolve, 1000),
                                   );
@@ -604,9 +618,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                 </FormControl>
                 <FormDescription className="md:w-[230px] sm:w-[380px]">
                   <a href="https://www.ilovepdf.com/merge_pdf" target="_blank">
-                    En caso de que la factura no se encuentre a tu nombre,
-                    súbela en un mismo archivo junto a una declaración
-                    juramentada indicando que es de tu propiedad
+                    {invoiceDescription}
                   </a>
                 </FormDescription>
                 <FormMessage />
@@ -637,7 +649,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                       name={`vehicles.${index}.vehicleType`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="md:w-1/3 text-gray-900">
+                          <FormLabel className="md:w-1/3 text-gray-900 dark:text-white">
                             {vehicleType}
                           </FormLabel>
                           <FormControl>
@@ -672,7 +684,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                       name={`vehicles.${index}.brand`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="md:w-1/3 text-gray-900">
+                          <FormLabel className="md:w-1/3 text-gray-900 dark:text-white">
                             {vehicleBrand}
                           </FormLabel>
                           <FormControl>
@@ -730,7 +742,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             )}
           />
           <div className="col-span-2 flex justify-center">
-            <Button type="submit">Enviar</Button>
+            <Button type="submit">{submit}</Button>
           </div>
         </form>
       </Form>

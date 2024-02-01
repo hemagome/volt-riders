@@ -1,5 +1,11 @@
 {
-    "Menu":{
+    "AboutUs":{
+        "knowUs": "Meet the work table"
+    },
+    "Home": {
+        "welcomeMessage": "Welcome to the largest electric mobility club in Colombia"
+    },
+    "Navbar":{
         "aboutUs": "About us",
         "benefits": "Benefits",
         "blog": "Blog",
@@ -11,27 +17,31 @@
         "signUp": "Sign up",
         "weatherMap": "Weather map"
     },
-    "Label":{
+    "SignUp":{
+        "aboutYou": "Tell us a bit about yourself",
         "agreeTerms": "Agree terms and conditions",
         "birthdate": "Birthdate",
+        "dragDrop": "Drag & drop or click to upload",
         "documentNumber": "Document number",
         "documentType": "Document type",
         "emergencyContact": "Emergency contact",
         "eps": "EPS",
+        "howKnowUs": "How did you hear about us",
         "invoice": "Invoice",
+        "invoiceDescription": "If the invoice is not in your name, upload it in the same file together with an affidavit stating that you own it",
         "job": "Job",
-        "knowUs": "Meet the work table",
         "name": "Fullname",
         "nickname": "Nickname",
         "nicknameDescription": "As you like to be called",
+        "selectDate": "Select a date",
+        "selectEps": "Select Eps",
         "cellphone": "Cellphone",
         "contactPhone": "Contact phone",
+        "referMessage": "Mention if someone invited you",
         "rh": "RH",
+        "submit": "Submit",
         "vehicleBrand": "Vehicle brand",
-        "vehicleType": "Vehicle type",
-        "light": "Light",
-        "dark": "Dark",
-        "system": "System"
+        "vehicleType": "Vehicle type"
     },
     "LocaleSwitcher": {
         "label": "Change language",

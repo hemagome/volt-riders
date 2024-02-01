@@ -1,5 +1,11 @@
 {
-    "Menu":{
+    "AboutUs":{
+        "knowUs": "Conoce la mesa de trabajo"
+    },
+    "Home":{
+        "welcomeMessage": "Bienvenidos al club de movilidad eléctrica más grande de Colombia"
+    },
+    "Navbar":{
         "aboutUs": "Acerca de nosotros",
         "benefits": "Beneficios",
         "blog": "Blog",
@@ -11,27 +17,31 @@
         "signUp": "Registrate",
         "weatherMap": "Mapa clima"
     },
-    "Label":{
+    "SignUp":{
+        "aboutYou": "Cuentanos un poco acerca de ti",
         "agreeTerms": "Acepta términos y condiciones",
         "birthdate": "Fecha de nacimiento",
+        "dragDrop": "Arrastre o haga click para subir",
         "documentNumber": "Número documento",
         "documentType": "Tipo documento",
         "emergencyContact": "Contacto de emergencia",
         "eps": "EPS",
         "invoice": "Factura",
+        "invoiceDescription": "Si la factura no se encuentre a tu nombre, súbela en un mismo archivo junto a una declaración juramentada indicando que es de tu propiedad",
         "job": "Ocupación",
-        "knowUs": "Conoce la mesa de trabajo",
+        "howKnowUs": "Cómo nos conociste",
         "name": "Nombre completo",
         "nickname": "Apodo",
         "nicknameDescription": "Como te gusta que te llamen",
+        "selectDate": "Seleccione una fecha",
         "cellphone": "Celular",
         "contactPhone": "Celular contacto",
+        "referMessage": "Puedes mencionar si alguien te referencio",
         "rh": "RH",
+        "selectEps": "Seleccione una EPS",
+        "submit": "Enviar",
         "vehicleBrand": "Marca de vehículo",
-        "vehicleType": "Tipo de vehículo",
-        "light": "Luz",
-        "dark": "Oscuro",
-        "system": "Sistema"
+        "vehicleType": "Tipo de vehículo"
     },
     "LocaleSwitcher": {
         "label": "Cambiar lenguaje",

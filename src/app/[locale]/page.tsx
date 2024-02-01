@@ -1,53 +1,48 @@
-"use client";
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, DotIcon } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 export default function Home() {
+  const t = useTranslations("Home");
   const slides = [
-    { url: "/WeRacingRuedas.jpg" },
-    { url: "/WeRacingRuedas2.jpg" },
+    { url: "/Asado.jpg" },
     { url: "/Rodada1.jpg" },
     { url: "/Rodada2.jpg" },
+    { url: "/WeRacingRuedas.jpg" },
     { url: "/Rodada3.jpg" },
+    { url: "/WeRacingRuedas2.jpg" },
   ];
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const prevSlide = () => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
-  const nextSlide = () => {
-    const isLastSlide = currentIndex === slides.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  };
-  const goToSlide = (slideIndex: number) => {
-    setCurrentIndex(slideIndex);
-  };
 
   return (
-    <div className="max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group">
-      <div
-        style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-        className="w-full h-full rounded-2xl bg-center bg-cover duration-500"
-      ></div>
-      <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-        <ChevronLeft onClick={prevSlide} size={30} />
-      </div>
-      <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-        <ChevronRight onClick={nextSlide} size={30} />
-      </div>
-      <div className="flex top-4 justify-center py-2">
-        {slides.map((_slide, slideIndex) => (
-          <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className="text-2xl cursor-pointer"
-          >
-            <DotIcon />
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      <br />
+      <h2 className="text-3xl mb-4 flex flex-col items-center">
+        {t("welcomeMessage")}
+      </h2>
+      <br />
+      <Carousel>
+        <CarouselContent>
+          {slides.map((slide) => (
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <Image
+                alt="Foto rodada"
+                className="mb-8"
+                width={720}
+                height={720}
+                src={slide.url}
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </>
   );
 }
