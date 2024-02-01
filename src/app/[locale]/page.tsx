@@ -29,7 +29,7 @@ export default function Home() {
       <Carousel>
         <CarouselContent>
           {slides.map((slide) => (
-            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={slide.url}>
               <Image
                 alt="Foto rodada"
                 className="mb-8"
