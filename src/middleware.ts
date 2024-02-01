@@ -32,6 +32,7 @@ export default authMiddleware({
     "/:locale/sign-up",
     "/:locale/sign-in",
     "/:locale/weather",
+    "/:locale/test",
   ],
   //debug: true,
 });
