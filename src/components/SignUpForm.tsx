@@ -261,21 +261,20 @@ export default function SignUpForm(props: SignUpFormProps) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setReadTerms(true);
+          console.log("Párrafo completamente visible");
         }
       });
     });
-
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentReadTerms = ref.current;
+    if (currentReadTerms) {
+      observer.observe(currentReadTerms);
     }
-
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentReadTerms) {
+        observer.unobserve(currentReadTerms);
       }
     };
-  }, [ref.current]);
+  }, [ref]);
 
   return (
     <div className="flex justify-center min-h-screen p-4 ">

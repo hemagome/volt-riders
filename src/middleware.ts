@@ -23,6 +23,8 @@ export default authMiddleware({
 
   publicRoutes: [
     "/",
+    "/es",
+    "/en",
     "/:locale",
     "/:locale/about-us",
     "/api/document",
