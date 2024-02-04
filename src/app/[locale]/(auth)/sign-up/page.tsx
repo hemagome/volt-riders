@@ -9,12 +9,11 @@ export default function Page() {
       agreeTerms={t("agreeTerms")}
       birthdate={t("birthdate")}
       cellphone={t("cellphone")}
-      contactPhone={t("contactPhone")}
       documentNumber={t("documentNumber")}
       documentType={t("documentType")}
       dragDrop={t("dragDrop")}
-      emergencyContact={t("emergencyContact")}
       eps={t("eps")}
+      gender={t("gender")}
       howKnowUs={t("howKnowUs")}
       invoice={t("invoice")}
       invoiceDescription={t("invoiceDescription")}
@@ -23,6 +22,7 @@ export default function Page() {
       nickname={t("nickname")}
       nicknameDescription={t("nicknameDescription")}
       referMessage={t("referMessage")}
+      relationship={t("relationship")}
       rh={t("rh")}
       selectDate={t("selectDate")}
       selectEps={t("selectEps")}

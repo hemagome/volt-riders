@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "./ui/label";
 import {
   MultiFileDropzone,
   type FileState,
@@ -34,6 +35,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -43,26 +45,19 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useForm, useFieldArray } from "react-hook-form";
 import useSWRImmutable from "swr/immutable";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const FormSchema = z.object({
-  firstname: z
+  fullname: z
     .string({
       required_error: "Nombre es requerido",
     })
     .min(3, {
       message: "Nombre debe tener al menos 3 letras",
-    }),
-  nickname: z
-    .string({
-      required_error: "Apodo requerido",
-    })
-    .min(3, {
-      message: "Apodo debe tener al menos 3 letras",
     }),
   documentNumber: z.coerce
     .number({
@@ -108,14 +103,6 @@ const FormSchema = z.object({
   birthdate: z.date({
     required_error: "Fecha de nacimiento es requerida",
   }),
-  bio: z
-    .string({ required_error: "Información requerida" })
-    .min(10, {
-      message: "Información debe tener al menos 10 carácteres",
-    })
-    .max(160, {
-      message: "Información no debe tener más de 160 carácteres",
-    }),
   eps: z.string({
     required_error: "Por favor seleccione una EPS",
   }),
@@ -139,6 +126,25 @@ const FormSchema = z.object({
       }),
     )
     .nonempty({ message: "Vehículo es requerido" }),
+  gender: z.string({ required_error: "Género requerido" }),
+  relationship: z.string({ required_error: "Género requerido" }),
+  bio: z
+    .string({ required_error: "Información requerida" })
+    .min(10, {
+      message: "Información debe tener al menos 10 carácteres",
+    })
+    .max(160, {
+      message: "Información no debe tener más de 160 carácteres",
+    })
+    .optional(),
+  nickname: z
+    .string({
+      required_error: "Apodo requerido",
+    })
+    .min(3, {
+      message: "Apodo debe tener al menos 3 letras",
+    })
+    .optional(),
 });
 
 const locale = es;
@@ -151,8 +157,6 @@ interface SignUpFormProps {
   job: string;
   cellphone: string;
   eps: string;
-  emergencyContact: string;
-  contactPhone: string;
   rh: string;
   birthdate: string;
   invoice: string;
@@ -168,6 +172,8 @@ interface SignUpFormProps {
   aboutYou: string;
   selectDate: string;
   invoiceDescription: string;
+  gender: string;
+  relationship: string;
 }
 
 export default function SignUpForm(props: SignUpFormProps) {
@@ -179,8 +185,6 @@ export default function SignUpForm(props: SignUpFormProps) {
     job,
     cellphone,
     eps,
-    emergencyContact,
-    contactPhone,
     rh,
     birthdate,
     invoice,
@@ -196,6 +200,8 @@ export default function SignUpForm(props: SignUpFormProps) {
     aboutYou,
     selectDate,
     invoiceDescription,
+    gender,
+    relationship,
   } = props;
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
@@ -210,11 +216,12 @@ export default function SignUpForm(props: SignUpFormProps) {
     "/api/vehicle/type",
     fetcher,
   );
+  const ref = useRef<HTMLHeadingElement>(null);
   const { edgestore } = useEdgeStore();
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   const [selectedVehicleType, setSelectedVehicleType] = useState(""); // Estado local para el vehicleType seleccionado
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]); // Estado para almacenar las marcas seleccionadas
-
+  const [readTerms, setReadTerms] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onBlur",
@@ -250,20 +257,40 @@ export default function SignUpForm(props: SignUpFormProps) {
       ),
     });
   }
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setReadTerms(true);
+        }
+      });
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [ref.current]);
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
+    <div className="flex justify-center min-h-screen p-4 ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full md:w-2/3 space-y-6 md:space-y-0 md:grid md:grid-cols-2 md:gap-6"
+          className="w-full md:w-2/3 space-y-6 md:space-y-0 md:grid md:grid-cols-3 md:gap-6"
         >
+          <Label className="text-xl md:col-span-3">Información personal</Label>
           <FormField
             control={form.control}
-            name="firstname"
+            name="fullname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {name}
                 </FormLabel>
                 <FormControl>
@@ -275,16 +302,73 @@ export default function SignUpForm(props: SignUpFormProps) {
           />
           <FormField
             control={form.control}
-            name="nickname"
+            name="gender"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
-                  {nickname}
+                <FormLabel className="text-md font-semibold md:w-1/3">
+                  {gender}
                 </FormLabel>
                 <FormControl>
-                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
+                  <Select onValueChange={field.onChange}>
+                    <SelectTrigger className="md:w-[230px] sm:w-[380px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Femenino">Femenino</SelectItem>
+                      <SelectItem value="Masculino">Masculino</SelectItem>
+                      <SelectItem value="LGTBIQ+">39 tipos de gay</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <FormDescription>{nicknameDescription}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="birthdate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel className="text-md font-semibold">
+                  {birthdate}
+                </FormLabel>
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "md:w-[230px] sm:w-[380px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value ? (
+                          format(new Date(field.value), "PPP", { locale })
+                        ) : (
+                          <span>{selectDate}</span>
+                        )}
+                        <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown-buttons"
+                      selected={field.value}
+                      onSelect={(date) => {
+                        setCalendarOpen(false);
+                        field.onChange(date);
+                      }}
+                      fromYear={1960}
+                      toYear={2023}
+                      disabled={(date: Date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
@@ -294,7 +378,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="documentType"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold">
                   {documentType}
                 </FormLabel>
                 <FormControl>
@@ -323,7 +407,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="documentNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {documentNumber}
                 </FormLabel>
                 <FormControl>
@@ -338,7 +422,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="job"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {job}
                 </FormLabel>
                 <FormControl>
@@ -353,7 +437,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {cellphone}
                 </FormLabel>
                 <FormControl>
@@ -368,7 +452,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="eps"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {eps}
                 </FormLabel>
                 <Popover open={epsOpen} onOpenChange={setEpsOpen}>
@@ -421,40 +505,10 @@ export default function SignUpForm(props: SignUpFormProps) {
           />
           <FormField
             control={form.control}
-            name="contactName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
-                  {emergencyContact}
-                </FormLabel>
-                <FormControl>
-                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="contactPhone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
-                  {contactPhone}
-                </FormLabel>
-                <FormControl>
-                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="rh"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {rh}
                 </FormLabel>
                 <FormControl>
@@ -481,51 +535,67 @@ export default function SignUpForm(props: SignUpFormProps) {
               </FormItem>
             )}
           />
+          <Label className="text-xl md:col-span-3">
+            Contacto de emergencia
+          </Label>
           <FormField
             control={form.control}
-            name="birthdate"
+            name="contactName"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
-                  {birthdate}
+              <FormItem>
+                <FormLabel className="text-md font-semibold md:w-1/3">
+                  {name}
                 </FormLabel>
-                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "md:w-[230px] sm:w-[380px] pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground",
-                        )}
-                      >
-                        {field.value ? (
-                          format(new Date(field.value), "PPP", { locale })
-                        ) : (
-                          <span>{selectDate}</span>
-                        )}
-                        <CalendarDaysIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      captionLayout="dropdown-buttons"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        setCalendarOpen(false);
-                        field.onChange(date);
-                      }}
-                      fromYear={1960}
-                      toYear={2023}
-                      disabled={(date: Date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                <FormControl>
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="contactPhone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-md font-semibold md:w-1/3">
+                  {cellphone}
+                </FormLabel>
+                <FormControl>
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="relationship"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-md font-semibold md:w-1/3">
+                  {relationship}
+                </FormLabel>
+                <FormControl>
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Label className="text-xl md:col-span-3">Información opcional</Label>
+          <FormField
+            control={form.control}
+            name="nickname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-md font-semibold md:w-1/3">
+                  {nickname}
+                </FormLabel>
+                <FormControl>
+                  <Input className="md:w-[230px] sm:w-[380px]" {...field} />
+                </FormControl>
+                <FormDescription>{nicknameDescription}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -535,7 +605,7 @@ export default function SignUpForm(props: SignUpFormProps) {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {howKnowUs}
                 </FormLabel>
                 <FormControl>
@@ -550,12 +620,18 @@ export default function SignUpForm(props: SignUpFormProps) {
               </FormItem>
             )}
           />
+          <Label className="text-xl md:col-span-3">Información vehículo</Label>
+          <br className="md:hidden" />
+          <Label className="md:col-span-3 text-sm text-muted-foreground">
+            Si quieres registrar más de 1 vehículo, debes adjuntar una factura
+            por cada uno
+          </Label>
           <FormField
             control={form.control}
             name="vehicles"
             render={() => (
               <FormItem>
-                <FormLabel className="text-md font-semibold md:w-1/3 text-gray-900 dark:text-white">
+                <FormLabel className="text-md font-semibold md:w-1/3">
                   {invoice}
                 </FormLabel>
                 <FormControl>
@@ -649,7 +725,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                       name={`vehicles.${index}.vehicleType`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="md:w-1/3 text-gray-900 dark:text-white">
+                          <FormLabel className="md:w-1/3">
                             {vehicleType}
                           </FormLabel>
                           <FormControl>
@@ -684,7 +760,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                       name={`vehicles.${index}.brand`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="md:w-1/3 text-gray-900 dark:text-white">
+                          <FormLabel className="md:w-1/3">
                             {vehicleBrand}
                           </FormLabel>
                           <FormControl>
@@ -723,6 +799,27 @@ export default function SignUpForm(props: SignUpFormProps) {
               );
             })}
           </div>
+          <br />
+          <Label className="text-xl md:col-span-3">
+            Términos y condiciones
+          </Label>
+          <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4 md:col-span-3">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Perferendis assumenda id pariatur, fugiat reprehenderit nesciunt
+              temporibus veniam inventore tempore reiciendis nemo delectus, qui
+              neque aspernatur similique odio. Veritatis, provident hic. Lorem
+              ipsum, dolor sit amet consectetur adipisicing elit. Temporibus
+              tempore consequatur, commodi laborum numquam voluptas officia et!
+              Consectetur saepe inventore quasi voluptas dolorum veritatis vel
+              repudiandae, adipisci iusto dolore quidem. Lorem ipsum, dolor sit
+              amet consectetur adipisicing elit. Doloribus quidem inventore
+              quod. Accusamus reiciendis eos sequi natus saepe recusandae quod.
+              Aspernatur, unde. Delectus, debitis! Ducimus minus qui dolorem ut
+              sunt.
+            </p>
+            <h2 ref={ref}>Al llegar aqui se debe activar el checkbox</h2>
+          </ScrollArea>
           <FormField
             control={form.control}
             name="terms"
@@ -730,18 +827,19 @@ export default function SignUpForm(props: SignUpFormProps) {
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
                 <FormControl>
                   <Checkbox
+                    disabled={!readTerms}
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormLabel className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <FormLabel className="block mb-2 text-sm font-medium">
                   {agreeTerms}
                 </FormLabel>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="col-span-2 flex justify-center">
+          <div className="col-span-3 flex justify-center">
             <Button type="submit">{submit}</Button>
           </div>
         </form>
