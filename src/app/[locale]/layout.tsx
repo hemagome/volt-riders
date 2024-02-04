@@ -9,6 +9,7 @@ import { GeistMono } from "geist/font/mono";
 import { Inter } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { NextIntlClientProvider, useMessages } from "next-intl";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { unstable_setRequestLocale } from "next-intl/server";
@@ -51,7 +52,10 @@ const RootLayout: React.FC<Props> = ({ children, params: { locale } }) => {
               disableTransitionOnChange
             >
               <Navbar />
-              <EdgeStoreProvider>{children}</EdgeStoreProvider>
+              <EdgeStoreProvider>
+                {children}
+                <SpeedInsights />
+              </EdgeStoreProvider>
               <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
