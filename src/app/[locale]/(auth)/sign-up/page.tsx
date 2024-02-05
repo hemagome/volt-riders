@@ -16,14 +16,16 @@ export default function Page() {
       emergencyContact={t("emergencyContact")}
       eps={t("eps")}
       female={t("female")}
+      firstName={t("firstName")}
+      fullName={t("fullName")}
       gender={t("gender")}
       howKnowUs={t("howKnowUs")}
       invoice={t("invoice")}
       invoiceAdvice={t("invoiceAdvice")}
       invoiceDescription={t("invoiceDescription")}
       job={t("job")}
+      lastName={t("lastName")}
       male={t("male")}
-      name={t("name")}
       nickname={t("nickname")}
       nicknameDescription={t("nicknameDescription")}
       nonBinary={t("nonBinary")}
