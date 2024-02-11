@@ -80,7 +80,6 @@ const OTPInputGroup: React.FC<OTPInputGroupProps> = ({
               phone: data.phone,
               contactPhone: data.contactPhone,
               contactName: data.contactName,
-              rh: data.rh,
               birthdate: data.birthdate.toISOString().split("T")[0],
               documentType: data.documentType,
               vehicles: data.vehicles,

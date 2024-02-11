@@ -40,33 +40,32 @@ export async function POST(req: Request) {
 
     await transporter.sendMail({
       from: process.env.EMAIL,
-      to: "hemagome-28@hotmail.com",
+      to: "southelectricscooter@gmail.com",
       subject: "Nuevo usuario registrado",
       html: `<ul>
-  <li>Nombres: ${data.firstName}</li>
-  <li>Apellidos: ${data.lastName}</li>
-  <li>Número de documento: ${data.documentNumber}</li>
-  <li>Teléfono: ${data.phone}</li>
-  <li>Teléfono de contacto: ${data.contactPhone}</li>
-  <li>Nombre de contacto: ${data.contactName}</li>
-  <li>Grupo sanguíneo: ${data.rh}</li>
-  <li>Fecha de nacimiento: ${data.birthdate}</li>
-  <li>Tipo de documento: ${data.documentType}</li>
-  <li>Vehículos:
-          <table border="1">
-            <thead>
-              <tr>
-                <th>Tipo de vehículo</th>
-                <th>Marca</th>
-                <th>URL</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${vehiclesTable}
-            </tbody>
-          </table>
-        </li>
-</ul>`,
+              <li>Nombres: ${data.firstName}</li>
+              <li>Apellidos: ${data.lastName}</li>
+              <li>Fecha de nacimiento: ${data.birthdate}</li>
+              <li>Tipo de documento: ${data.documentType}</li>
+              <li>Número de documento: ${data.documentNumber}</li>
+              <li>Teléfono: ${data.phone}</li>
+              <li>Nombre de contacto: ${data.contactName}</li>
+              <li>Teléfono de contacto: ${data.contactPhone}</li>
+              <li>Vehículos:
+                <table border="1">
+                  <thead>
+                    <tr>
+                      <th>Tipo de vehículo</th>
+                      <th>Marca</th>
+                      <th>URL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${vehiclesTable}
+                  </tbody>
+                </table>
+              </li>
+            </ul>`,
     });
   } catch (error) {
     console.error(error);
