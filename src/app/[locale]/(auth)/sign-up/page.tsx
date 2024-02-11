@@ -6,10 +6,10 @@ export default function Page() {
 
   return (
     <SignUpForm
-      aboutYou={t("aboutYou")}
       agreeTerms={t("agreeTerms")}
       birthdate={t("birthdate")}
       cellphone={t("cellphone")}
+      confirmPassword={t("confirmPassword")}
       documentNumber={t("documentNumber")}
       documentType={t("documentType")}
       dragDrop={t("dragDrop")}
@@ -19,28 +19,26 @@ export default function Page() {
       firstName={t("firstName")}
       fullName={t("fullName")}
       gender={t("gender")}
-      howKnowUs={t("howKnowUs")}
       invoice={t("invoice")}
       invoiceAdvice={t("invoiceAdvice")}
       invoiceDescription={t("invoiceDescription")}
-      job={t("job")}
       lastName={t("lastName")}
+      mail={t("mail")}
       male={t("male")}
-      nickname={t("nickname")}
-      nicknameDescription={t("nicknameDescription")}
       nonBinary={t("nonBinary")}
-      optionalData={t("optionalData")}
+      password={t("password")}
       personalData={t("personalData")}
-      referMessage={t("referMessage")}
       relationship={t("relationship")}
       rh={t("rh")}
       selectDate={t("selectDate")}
       selectEps={t("selectEps")}
+      sentCode={t("sentCode")}
       submit={t("submit")}
       terms={t("terms")}
       vehicleBrand={t("vehicleBrand")}
       vehicleData={t("vehicleData")}
       vehicleType={t("vehicleType")}
+      verify={t("verify")}
     />
   );
 }

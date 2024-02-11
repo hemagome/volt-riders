@@ -43,126 +43,116 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useState, useRef, useEffect } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useRouter } from "@/navigation";
 import { useSignUp } from "@clerk/nextjs";
 import useSWRImmutable from "swr/immutable";
 import { zodResolver } from "@hookform/resolvers/zod";
+import OTPInputGroup from "./otpInputs";
 
-const FormSchema = z.object({
-  firstName: z
-    .string({
-      required_error: "Nombre es requerido",
-    })
-    .min(3, {
-      message: "Nombre debe tener al menos 3 letras",
-    }),
-  lastName: z
-    .string({
-      required_error: "Apellido es requerido",
-    })
-    .min(3, {
-      message: "Apellido debe tener al menos 3 letras",
-    }),
-  documentNumber: z.coerce
-    .number({
-      required_error: "Documento es requerido",
-      invalid_type_error: "El documento debe ser numérico",
-    })
-    .int()
-    .gte(10000000, {
-      message: "Documento debe tener al menos 8 digitos",
-    })
-    .lte(9999999999, {
-      message: "Documento no puede tener más de 10 digitos",
-    }),
-  phone: z.coerce
-    .number({
-      required_error: "Teléfono requerido",
-      invalid_type_error: "El teléfono debe ser numérico",
-    })
-    .int()
-    .gte(3000000000, { message: "Celular debe tener 10 digitos" })
-    .lte(3299999999, { message: "Celular debe tener 10 digitos" }),
-  contactPhone: z.coerce
-    .number({
-      required_error: "Teléfono requerido",
-      invalid_type_error: "El teléfono debe ser numérico",
-    })
-    .int()
-    .gte(3000000000, { message: "Celular debe tener 10 digitos" })
-    .lte(3299999999, { message: "Celular debe tener 10 digitos" }),
-  contactName: z
-    .string({
-      required_error: "Nombre contacto es requerido",
-    })
-    .min(3, {
-      message: "Nombre debe tener al menos 3 letras",
-    }),
-  rh: z
-    .string({
-      required_error: "Por favor seleccione un grupo sanguíneo",
-    })
-    .min(2)
-    .max(3),
-  birthdate: z.date({
-    required_error: "Fecha de nacimiento es requerida",
-  }),
-  eps: z.string({
-    required_error: "Por favor seleccione una EPS",
-  }),
-  documentType: z.string({ required_error: "Tipo de documento requerido" }),
-  job: z.string({ required_error: "Profesión requerida" }),
-  terms: z
-    .boolean({ required_error: "Se requiere aceptar términos y condiciones" })
-    .refine((value) => value === true, {
-      message: "Se requiere aceptar términos y condiciones",
-    }),
-  vehicles: z
-    .array(
-      z.object({
-        file: z.any(),
-        vehicleType: z
-          .string({ required_error: "Tipo de vehículo requerido" })
-          .min(1, { message: "Tipo de vehículo requerido" }),
-        brand: z
-          .string({ required_error: "Marca de vehículo requerida" })
-          .min(1, { message: "Marca de vehículo requerida" }),
+export const FormSchema = z
+  .object({
+    firstName: z
+      .string({
+        required_error: "Nombre es requerido",
+      })
+      .min(3, {
+        message: "Nombre debe tener al menos 3 letras",
       }),
-    )
-    .nonempty({ message: "Factura requerida" }),
-  gender: z.string({ required_error: "Género requerido" }),
-  relationship: z.string({ required_error: "Parentesco requerido" }),
-  bio: z
-    .string({ required_error: "Información requerida" })
-    .min(10, {
-      message: "Información debe tener al menos 10 carácteres",
-    })
-    .max(160, {
-      message: "Información no debe tener más de 160 carácteres",
-    })
-    .optional(),
-  nickname: z
-    .string({
-      required_error: "Apodo requerido",
-    })
-    .min(3, {
-      message: "Apodo debe tener al menos 3 letras",
-    })
-    .optional(),
-});
+    lastName: z
+      .string({
+        required_error: "Apellido es requerido",
+      })
+      .min(3, {
+        message: "Apellido debe tener al menos 3 letras",
+      }),
+    documentNumber: z.coerce
+      .number({
+        required_error: "Documento es requerido",
+        invalid_type_error: "El documento debe ser numérico",
+      })
+      .int()
+      .gte(10000000, {
+        message: "Documento debe tener al menos 8 digitos",
+      })
+      .lte(9999999999, {
+        message: "Documento no puede tener más de 10 digitos",
+      }),
+    phone: z.coerce
+      .number({
+        required_error: "Teléfono requerido",
+        invalid_type_error: "El teléfono debe ser numérico",
+      })
+      .int()
+      .gte(3000000000, { message: "Celular debe tener 10 digitos" })
+      .lte(3299999999, { message: "Celular debe tener 10 digitos" }),
+    contactPhone: z.coerce
+      .number({
+        required_error: "Teléfono requerido",
+        invalid_type_error: "El teléfono debe ser numérico",
+      })
+      .int()
+      .gte(3000000000, { message: "Celular debe tener 10 digitos" })
+      .lte(3299999999, { message: "Celular debe tener 10 digitos" }),
+    contactName: z
+      .string({
+        required_error: "Nombre contacto es requerido",
+      })
+      .min(3, {
+        message: "Nombre debe tener al menos 3 letras",
+      }),
+    rh: z
+      .string({
+        required_error: "Por favor seleccione un grupo sanguíneo",
+      })
+      .min(2)
+      .max(3),
+    birthdate: z.date({
+      required_error: "Fecha de nacimiento es requerida",
+    }),
+    eps: z.string({
+      required_error: "Por favor seleccione una EPS",
+    }),
+    documentType: z.string({ required_error: "Tipo de documento requerido" }),
+    terms: z
+      .boolean({ required_error: "Se requiere aceptar términos y condiciones" })
+      .refine((value) => value === true, {
+        message: "Se requiere aceptar términos y condiciones",
+      }),
+    vehicles: z
+      .array(
+        z.object({
+          file: z.any(),
+          vehicleType: z
+            .string({ required_error: "Tipo de vehículo requerido" })
+            .min(1, { message: "Tipo de vehículo requerido" }),
+          brand: z
+            .string({ required_error: "Marca de vehículo requerida" })
+            .min(1, { message: "Marca de vehículo requerida" }),
+          url: z.string(),
+        }),
+      )
+      .nonempty({ message: "Factura requerida" }),
+    gender: z.string({ required_error: "Género requerido" }),
+    relationship: z.string({ required_error: "Parentesco requerido" }),
+    mail: z
+      .string({ required_error: "Correo electrónico requerido" })
+      .email({ message: "Correo electrónico invalido" }),
+    password: z.string({ required_error: "Contraseña requerida" }),
+    confirm: z.string({ required_error: "Contraseña requerida" }),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Contraseñas no concuerdan",
+    path: ["confirm"],
+  });
 
 const locale = es;
 
 interface SignUpFormProps {
-  nickname: string;
   documentType: string;
   documentNumber: string;
-  job: string;
   cellphone: string;
   eps: string;
   rh: string;
@@ -171,20 +161,15 @@ interface SignUpFormProps {
   agreeTerms: string;
   vehicleType: string;
   vehicleBrand: string;
-  nicknameDescription: string;
   selectEps: string;
-  howKnowUs: string;
   submit: string;
   dragDrop: string;
-  referMessage: string;
-  aboutYou: string;
   selectDate: string;
   invoiceDescription: string;
   gender: string;
   relationship: string;
   emergencyContact: string;
   personalData: string;
-  optionalData: string;
   male: string;
   female: string;
   nonBinary: string;
@@ -194,14 +179,17 @@ interface SignUpFormProps {
   firstName: string;
   lastName: string;
   fullName: string;
+  mail: string;
+  password: string;
+  confirmPassword: string;
+  verify: string;
+  sentCode: string;
 }
 
 export default function SignUpForm(props: SignUpFormProps) {
   const {
-    nickname,
     documentType,
     documentNumber,
-    job,
     cellphone,
     eps,
     rh,
@@ -210,20 +198,15 @@ export default function SignUpForm(props: SignUpFormProps) {
     agreeTerms,
     vehicleBrand,
     vehicleType,
-    nicknameDescription,
     selectEps,
-    howKnowUs,
     submit,
     dragDrop,
-    referMessage,
-    aboutYou,
     selectDate,
     invoiceDescription,
     gender,
     relationship,
     emergencyContact,
     personalData,
-    optionalData,
     male,
     female,
     nonBinary,
@@ -233,6 +216,11 @@ export default function SignUpForm(props: SignUpFormProps) {
     firstName,
     lastName,
     fullName,
+    mail,
+    password,
+    confirmPassword,
+    verify,
+    sentCode,
   } = props;
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
@@ -252,17 +240,22 @@ export default function SignUpForm(props: SignUpFormProps) {
   const { edgestore } = useEdgeStore();
   const [epsOpen, setEpsOpen] = useState(false);
   const [fileStates, setFileStates] = useState<FileState[]>([]);
-  const [fileUrls, setFileUrls] = useState<string[]>([]);
-  const [pendingVerification, setPendingVerification] = useState(false);
+  const [pendingVerification, setPendingVerification] = useState(false); //Cambiado para pruebas
   const [readTerms, setReadTerms] = useState(false);
-  const router = useRouter();
   const [selectedVehicleType, setSelectedVehicleType] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const { isLoaded, signUp, setActive } = useSignUp();
+  const { isLoaded, signUp } = useSignUp();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onBlur",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      mail: "",
+      contactName: "",
+      relationship: "",
+    },
   });
 
   const { fields, append } = useFieldArray({
@@ -284,51 +277,26 @@ export default function SignUpForm(props: SignUpFormProps) {
   }
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "Diligenciaste los siguientes datos",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-    if (!isLoaded) {
-      return;
-    }
-    /*try {
-      await signUp.create({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        gender: data.gender,
-        phoneNumber: data.phone.toString(),
-        emailAddress: data.eps,
-      });
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-      setPendingVerification(true);
-    } catch (error) {
-      console.error(error);
-    }*/
-  }
-
-  const onPressVerify = async (code: string) => {
     if (!isLoaded) {
       return;
     }
     try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
-        code,
+      await signUp.create({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender,
+        emailAddress: data.mail,
+        password: data.password,
       });
-      if (completeSignUp.status !== "complete") {
-        console.log(JSON.stringify(completeSignUp, null, 2));
-      }
-      if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
-        router.push("/");
-      }
+      await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+      setPendingVerification(true);
     } catch (error) {
-      console.error(JSON.stringify(error, null, 2));
+      console.error(error);
     }
-  };
+  }
+
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -508,21 +476,6 @@ export default function SignUpForm(props: SignUpFormProps) {
               />
               <FormField
                 control={form.control}
-                name="job"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-md font-semibold md:w-1/3">
-                      {job}
-                    </FormLabel>
-                    <FormControl>
-                      <Input className="md:w-[230px] sm:w-[380px]" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
@@ -625,6 +578,59 @@ export default function SignUpForm(props: SignUpFormProps) {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="mail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-md font-semibold md:w-1/3">
+                      {mail}
+                    </FormLabel>
+                    <FormControl>
+                      <Input className="md:w-[230px] sm:w-[380px]" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-md font-semibold md:w-1/3">
+                      {password}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="md:w-[230px] sm:w-[380px]"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-md font-semibold md:w-1/3">
+                      {confirmPassword}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="md:w-[230px] sm:w-[380px]"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             {/* Sección de Contacto de Emergencia */}
             <div className="md:grid md:grid-cols-3 md:gap-6 py-8 space-y-6 md:space-y-0">
@@ -677,46 +683,6 @@ export default function SignUpForm(props: SignUpFormProps) {
                 )}
               />
             </div>
-            {/* Sección de Datos Opcionales */}
-            <div className="md:grid md:grid-cols-3 md:gap-6 py-8 space-y-6 md:space-y-0">
-              <Label className="text-xl md:col-span-3">{optionalData}</Label>
-              <FormField
-                control={form.control}
-                name="nickname"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-md font-semibold md:w-1/3">
-                      {nickname}
-                    </FormLabel>
-                    <FormControl>
-                      <Input className="md:w-[230px] sm:w-[380px]" {...field} />
-                    </FormControl>
-                    <FormDescription>{nicknameDescription}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-md font-semibold md:w-1/3">
-                      {howKnowUs}
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder={aboutYou}
-                        className="resize-y"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>{referMessage}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             {/* Sección de Datos de Vehículos */}
             <div className="md:grid md:grid-cols-3 md:gap-6 py-8 space-y-6 md:space-y-0">
               <Label className="text-xl md:col-span-3">{vehicleData}</Label>
@@ -748,14 +714,6 @@ export default function SignUpForm(props: SignUpFormProps) {
                           setFileStates(files);
                         }}
                         onFilesAdded={async (addedFiles) => {
-                          addedFiles.map((acceptedFile) => {
-                            return append({
-                              file: acceptedFile,
-                              vehicleType: "",
-                              brand: "",
-                            });
-                          });
-                          setFileStates([...fileStates, ...addedFiles]);
                           await Promise.all(
                             addedFiles.map(async (addedFileState) => {
                               try {
@@ -781,12 +739,17 @@ export default function SignUpForm(props: SignUpFormProps) {
                                     }
                                   },
                                 });
-                                console.log(res);
-                                /*setFileUrls((prevFileUrls) => [
-                                  ...prevFileUrls,
-                                  res.url,
-                                ]);*/
+                                addedFiles.map((acceptedFile) => {
+                                  return append({
+                                    file: acceptedFile,
+                                    vehicleType: "",
+                                    brand: "",
+                                    url: res.url,
+                                  });
+                                });
+                                setFileStates([...fileStates, ...addedFiles]);
                               } catch (err) {
+                                console.error("Error al subir archivo:", err);
                                 updateFileProgress(addedFileState.key, "ERROR");
                               }
                             }),
@@ -1052,7 +1015,6 @@ export default function SignUpForm(props: SignUpFormProps) {
                 <p> d) Disponibilidad de tiempo.</p>
                 <p> e) Contar con vehículo eléctrico.</p>
                 <p>
-                  {" "}
                   f) No tener negocios relacionados con movilidad eléctrica.
                 </p>
                 <p> g) Firmar el acuerdo de confidencialidad.</p>
@@ -1074,7 +1036,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                 <p>1. No cumplir con el presente Reglamento.</p>
                 <p>
                   2. Actos de irrespeto o agresión a los compañeros y alguna
-                  autoridad.{" "}
+                  autoridad.
                 </p>
                 <p>
                   3. Inasistencia constante a las reuniones y/o actividades
@@ -1091,7 +1053,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                 </p>
                 <p>
                   8. Comentarios mal intencionados y rastreros comprobada su
-                  intencionalidad.{" "}
+                  intencionalidad.
                 </p>
                 <p>9. No contar con vehículo eléctrico personal.</p>
                 <p>
@@ -1206,9 +1168,8 @@ export default function SignUpForm(props: SignUpFormProps) {
                   no serán permitidos.
                 </p>
                 <p>
-                  {" "}
                   2. Se ruega a los miembros escribir de manera correcta y
-                  legible.{" "}
+                  legible.
                 </p>
                 <p>
                   3. El uso de las MAYÚSCULAS denota un tono alto de voz, así
@@ -1283,7 +1244,6 @@ export default function SignUpForm(props: SignUpFormProps) {
                     <FormLabel className="block mb-2 text-sm font-medium">
                       {agreeTerms}
                     </FormLabel>
-                    {/*}<FormMessage />{*/}
                   </FormItem>
                 )}
               />
@@ -1294,18 +1254,13 @@ export default function SignUpForm(props: SignUpFormProps) {
           </form>
         </Form>
       )}
-      {/*pendingVerification && (
-        <Form>
-          <FormField>
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Input></Input>
-              </FormControl>
-            </FormItem>
-          </FormField>
-        </Form>
-      )*/}
+      {pendingVerification && (
+        <OTPInputGroup
+          data={form.getValues()}
+          verify={verify}
+          sentCode={sentCode}
+        />
+      )}
     </div>
   );
 }

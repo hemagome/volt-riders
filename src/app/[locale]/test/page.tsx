@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, DotIcon } from "lucide-react";
+import { useEdgeStore } from "@/lib/edgestore";
 
 export default function Home() {
   const slides = [
@@ -11,6 +12,7 @@ export default function Home() {
     { url: "/Rodada3.jpg" },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
     const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
@@ -24,6 +26,7 @@ export default function Home() {
   const goToSlide = (slideIndex: number) => {
     setCurrentIndex(slideIndex);
   };
+  const { edgestore } = useEdgeStore();
 
   return (
     <div className="max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group">

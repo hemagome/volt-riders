@@ -50,3 +50,10 @@ export const vehicleType = sqliteTable("vehicle_type", {
 });
 
 export type VehicleType = InferSelectModel<typeof vehicleType>;
+
+/*export const user = sqliteTable("users", {
+
+})
+
+export type UserType = InferSelectModel<typeof user>;
+*/
