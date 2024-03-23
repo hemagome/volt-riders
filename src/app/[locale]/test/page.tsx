@@ -4,11 +4,11 @@ import { ChevronLeft, ChevronRight, DotIcon } from "lucide-react";
 
 export default function Home() {
   const slides = [
-    { url: "/WeRacingRuedas.jpg" },
-    { url: "/WeRacingRuedas2.jpg" },
-    { url: "/Rodada1.jpg" },
-    { url: "/Rodada2.jpg" },
-    { url: "/Rodada3.jpg" },
+    { url: "/WeRacingRuedas.webp" },
+    { url: "/WeRacingRuedas2.webp" },
+    { url: "/Rodada1.webp" },
+    { url: "/Rodada2.webp" },
+    { url: "/Rodada3.webp" },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
 

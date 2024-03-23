@@ -14,7 +14,7 @@ export default function NotFound() {
         alt="Feas"
         className="mb-8"
         height="200"
-        src="/Feas.jpg"
+        src="/Feas.webp"
         style={{
           aspectRatio: "200/200",
           objectFit: "cover",

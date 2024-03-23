@@ -11,11 +11,11 @@ import Image from "next/image";
 export default function Home() {
   const t = useTranslations("Home");
   const slides = [
-    { url: "/Asado.jpg" },
-    { url: "/Rodada1.jpg" },
-    { url: "/Rodada2.jpg" },
+    { url: "/Asado.webp" },
+    { url: "/Rodada1.webp" },
+    { url: "/Rodada2.webp" },
     { url: "/WeRacingRuedas.webp" },
-    { url: "/Rodada3.jpg" },
+    { url: "/Rodada3.webp" },
     { url: "/WeRacingRuedas2.webp" },
   ];
 
@@ -36,6 +36,7 @@ export default function Home() {
                 width={720}
                 height={720}
                 src={slide.url}
+                loading="lazy"
               />
             </CarouselItem>
           ))}
