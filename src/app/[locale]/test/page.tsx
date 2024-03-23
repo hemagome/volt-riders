@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, DotIcon } from "lucide-react";
-import { useEdgeStore } from "@/lib/edgestore";
 
 export default function Home() {
   const slides = [
@@ -26,7 +25,6 @@ export default function Home() {
   const goToSlide = (slideIndex: number) => {
     setCurrentIndex(slideIndex);
   };
-  const { edgestore } = useEdgeStore();
 
   return (
     <div className="max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group">
