@@ -14,9 +14,9 @@ export default function Home() {
     { url: "/Asado.jpg" },
     { url: "/Rodada1.jpg" },
     { url: "/Rodada2.jpg" },
-    { url: "/WeRacingRuedas.jpg" },
+    { url: "/WeRacingRuedas.webp" },
     { url: "/Rodada3.jpg" },
-    { url: "/WeRacingRuedas2.jpg" },
+    { url: "/WeRacingRuedas2.webp" },
   ];
 
   return (
