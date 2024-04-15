@@ -13,7 +13,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { Eps, DocumentType, VehicleBrand, VehicleType } from "@/lib/schema";
-import es from "date-fns/locale/es";
+import { es } from "date-fns/locale";
 import { format } from "date-fns";
 import {
   Form,
