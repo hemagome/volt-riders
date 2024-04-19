@@ -283,7 +283,7 @@ export default function SignUpForm(props: SignUpFormProps) {
       await signUp.create({
         firstName: data.firstName,
         lastName: data.lastName,
-        gender: data.gender,
+        phoneNumber: data.phone.toString(),
         emailAddress: data.mail,
         password: data.password,
       });

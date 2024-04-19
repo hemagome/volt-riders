@@ -9,6 +9,7 @@ export default function Page() {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <SignIn
+        routing="hash"
         appearance={{
           baseTheme: resolvedTheme === "dark" ? dark : undefined,
           elements: {

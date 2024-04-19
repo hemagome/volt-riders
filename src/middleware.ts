@@ -1,4 +1,4 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 import { locales } from "./navigation";
 
@@ -7,35 +7,19 @@ const intlMiddleware = createMiddleware({
   defaultLocale: "es",
 });
 
-export default authMiddleware({
-  beforeAuth(request) {
-    return intlMiddleware(request);
-  },
-  afterAuth(auth, req) {
-    if (!auth.userId && !auth.isPublicRoute) {
-      const locale = "es";
-      req.nextUrl.pathname = `/${locale}/sign-in`;
+const isProtectedRoute = createRouteMatcher([
+  "/:locale/benefits",
+  "/:locale/blog(.*)",
+  "/:locale/calendar",
+]);
 
-      // Redirigir a la ruta deseada después de la autenticación
-      return Response.redirect(req.nextUrl);
-    }
+export default clerkMiddleware(
+  (auth, req) => {
+    if (isProtectedRoute(req)) auth().protect();
+    return intlMiddleware(req);
   },
-
-  publicRoutes: [
-    "/",
-    "/:locale",
-    "/:locale/about-us",
-    "/api/document",
-    "/api/edgestore/(.*)",
-    "/api/eps",
-    "/api/vehicle(.*)",
-    "/:locale/sign-up",
-    "/:locale/sign-in",
-    "/:locale/weather",
-    "/:locale/test",
-  ],
-  //debug: true,
-});
+  { debug: true },
+);
 
 export const config = {
   matcher: ["/", "/(es|en)/:path*"],
