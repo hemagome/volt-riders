@@ -1,0 +1,37 @@
+{
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "space",
+		"indentWidth": 2,
+		"lineEnding": "lf",
+		"lineWidth": 80,
+		"attributePosition": "auto",
+		"ignore": [
+			"**/build",
+			"**/coverage",
+			"**/*.html",
+			"**/.git",
+			"**/.svn",
+			"**/.hg",
+			"**/node_modules"
+		]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": { "recommended": false, "style": { "useBlockStatements": "off" } }
+	},
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"trailingComma": "all",
+			"semicolons": "asNeeded",
+			"arrowParentheses": "always",
+			"bracketSpacing": true,
+			"bracketSameLine": false,
+			"quoteStyle": "single",
+			"attributePosition": "auto"
+		}
+	}
+}
