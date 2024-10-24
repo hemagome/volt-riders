@@ -8,31 +8,39 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Inter } from "next/font/google";
 import { Navbar } from "@/components/navbar";
-import { NextIntlClientProvider, useMessages } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { routing } from "@/i18n/routing";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
+type Params = { locale: string };
 export const metadata: Metadata = {
   title: "Volt Riders",
   description: "Página web del club de movilidad eléctrica Volt Riders",
 };
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Params;
 }) {
+  const { locale } = await params;
   if (!routing.locales.includes(locale as "es" | "en")) {
     notFound();
   }
+
+  setRequestLocale(locale);
 
   const messages = await getMessages();
   return (

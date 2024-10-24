@@ -1,4 +1,4 @@
-type Messages = typeof import("./src/messages/en.json");
-type EsMessages = typeof import("./src/messages/es.json");
+type Messages = typeof import("./messages/en.json");
+type EsMessages = typeof import("./messages/es.json");
 
 declare interface IntlMessages extends Messages, EsMessages {}
