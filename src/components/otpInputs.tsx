@@ -3,7 +3,7 @@ import { FormSchema } from "./SignUpForm";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useEdgeStore } from "@/lib/edgestore";
-import { useRouter } from "@/navigation";
+import { useRouter } from "../i18n/routing";
 import { useSignUp } from "@clerk/nextjs";
 import { SyntheticEvent, useState } from "react";
 import { z } from "zod";

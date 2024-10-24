@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FacebookIcon, InstagramIcon, MenuIcon, Moon, Sun } from "lucide-react";
 import Image from "next/image";
-import { Link } from "../navigation";
+import { Link } from "../i18n/routing";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";

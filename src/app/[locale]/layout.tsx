@@ -12,8 +12,9 @@ import { NextIntlClientProvider, useMessages } from "next-intl";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { unstable_setRequestLocale } from "next-intl/server";
-import { locales } from "@/navigation";
+import { routing } from "@/i18n/routing";
+import { getMessages } from "next-intl/server";
+import { notFound } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,20 +23,18 @@ export const metadata: Metadata = {
   description: "Página web del club de movilidad eléctrica Volt Riders",
 };
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
-
-type Props = {
+export default async function LocaleLayout({
+  children,
+  params: { locale },
+}: {
   children: React.ReactNode;
-  params: {
-    locale: "en" | "es";
-  };
-};
+  params: { locale: string };
+}) {
+  if (!routing.locales.includes(locale as "es" | "en")) {
+    notFound();
+  }
 
-const RootLayout: React.FC<Props> = ({ children, params: { locale } }) => {
-  unstable_setRequestLocale(locale);
-  const messages = useMessages();
+  const messages = await getMessages();
   return (
     <ClerkProvider localization={esES}>
       <html
@@ -64,6 +63,4 @@ const RootLayout: React.FC<Props> = ({ children, params: { locale } }) => {
       </html>
     </ClerkProvider>
   );
-};
-
-export default RootLayout;
+}
