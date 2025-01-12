@@ -11,6 +11,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { Eps, DocumentType, VehicleBrand, VehicleType } from "@/lib/schema";
 import { es } from "date-fns/locale";
@@ -229,7 +230,7 @@ export default function SignUpForm(props: SignUpFormProps) {
     "/api/document",
     fetcher,
   );
-  const { data: epsList } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
+  const { data: epsList = [] } = useSWRImmutable<Eps[]>("/api/eps", fetcher);
   const { data: vehicleTypeList } = useSWRImmutable<VehicleType[]>(
     "/api/vehicle/type",
     fetcher,
@@ -254,6 +255,16 @@ export default function SignUpForm(props: SignUpFormProps) {
       mail: "",
       contactName: "",
       relationship: "",
+      documentType: "",
+      eps: "",
+      rh: "",
+      birthdate: undefined,
+      phone: undefined,
+      vehicles: [],
+      gender: "",
+      terms: false,
+      confirm: "",
+      password: "",
     },
   });
 
@@ -410,18 +421,11 @@ export default function SignUpForm(props: SignUpFormProps) {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          captionLayout="dropdown-buttons"
                           selected={field.value}
                           onSelect={(date) => {
                             setCalendarOpen(false);
                             field.onChange(date);
                           }}
-                          fromYear={1960}
-                          toYear={new Date().getFullYear()}
-                          disabled={(date: Date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>
@@ -516,28 +520,30 @@ export default function SignUpForm(props: SignUpFormProps) {
                       <PopoverContent className="md:w-[230px] sm:w-[380px] p-0">
                         <Command>
                           <CommandInput className="h-9" />
-                          <CommandEmpty>EPS no encontrada</CommandEmpty>
-                          <CommandGroup>
-                            {epsList?.map((eps) => (
-                              <CommandItem
-                                key={eps.nit}
-                                onSelect={() => {
-                                  form.setValue("eps", eps.nit);
-                                  setEpsOpen(false);
-                                }}
-                              >
-                                {eps.name}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    eps.nit === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
+                          <CommandList>
+                            <CommandEmpty>EPS no encontrada</CommandEmpty>
+                            <CommandGroup>
+                              {epsList?.map((eps) => (
+                                <CommandItem
+                                  key={eps.nit}
+                                  onSelect={() => {
+                                    form.setValue("eps", eps.nit);
+                                    setEpsOpen(false);
+                                  }}
+                                >
+                                  {eps.name}
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      eps.nit === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
                         </Command>
                       </PopoverContent>
                     </Popover>
