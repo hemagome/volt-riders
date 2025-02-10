@@ -49,7 +49,6 @@ export function Navbar() {
               alt="Logo VoltRiders"
               width={60}
               height={0}
-              priority
               className="w-full h-auto"
             />
           </Link>

@@ -29,6 +29,7 @@
         "firstName": "FirstName",
         "fullName": "Full name",
         "lastName": "LastName",
+        "lang": "en",
         "mail": "Email",
         "gender": "Gender",
         "invoice": "Invoice",

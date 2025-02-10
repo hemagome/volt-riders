@@ -22,6 +22,7 @@ export default function Page() {
       invoice={t("invoice")}
       invoiceAdvice={t("invoiceAdvice")}
       invoiceDescription={t("invoiceDescription")}
+      lang={t("lang")}
       lastName={t("lastName")}
       mail={t("mail")}
       male={t("male")}

@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarDaysIcon, ChevronsUpDownIcon, CheckIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn, fetcher } from "@/lib/utils";
+import { es, enUS } from "react-day-picker/locale";
 import {
   Command,
   CommandEmpty,
@@ -14,7 +15,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Eps, DocumentType, VehicleBrand, VehicleType } from "@/lib/schema";
-import { es } from "date-fns/locale";
+import { es as esDateFns, enUS as enDateFns } from "date-fns/locale";
 import { format } from "date-fns";
 import {
   Form,
@@ -148,8 +149,6 @@ export const FormSchema = z
     path: ["confirm"],
   });
 
-const locale = es;
-
 interface SignUpFormProps {
   documentType: string;
   documentNumber: string;
@@ -184,6 +183,7 @@ interface SignUpFormProps {
   confirmPassword: string;
   verify: string;
   sentCode: string;
+  lang: string;
 }
 
 export default function SignUpForm(props: SignUpFormProps) {
@@ -221,7 +221,9 @@ export default function SignUpForm(props: SignUpFormProps) {
     confirmPassword,
     verify,
     sentCode,
+    lang,
   } = props;
+  const locale = lang === "es" ? esDateFns : enDateFns;
   const { data: brandList } = useSWRImmutable<VehicleBrand[]>(
     "/api/vehicle/brand",
     fetcher,
@@ -410,7 +412,9 @@ export default function SignUpForm(props: SignUpFormProps) {
                             )}
                           >
                             {field.value ? (
-                              format(new Date(field.value), "PPP", { locale })
+                              format(new Date(field.value), "PPP", {
+                                locale: locale,
+                              })
                             ) : (
                               <span>{selectDate}</span>
                             )}
@@ -426,6 +430,7 @@ export default function SignUpForm(props: SignUpFormProps) {
                             setCalendarOpen(false);
                             field.onChange(date);
                           }}
+                          locale={lang === "es" ? es : enUS}
                         />
                       </PopoverContent>
                     </Popover>

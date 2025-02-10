@@ -28,6 +28,7 @@
         "eps": "EPS",
         "firstName": "Nombres",
         "fullName": "Nombre completo",
+        "lang": "es",
         "lastName": "Apellidos",
         "mail": "Correo electrónico",
         "password": "Contraseña",
