@@ -8,6 +8,9 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      EDGE_STORE_ACCESS_KEY: ${{ secrets.EDGE_STORE_ACCESS_KEY }}
+      EDGE_STORE_SECRET_KEY: ${{ secrets.EDGE_STORE_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,15 +20,8 @@ jobs:
         run: npm install -g pnpm && pnpm install
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
-      - name: Check CI environment
-        run: echo "CI is $CI"
       - name: Run Playwright tests
         run: pnpm exec playwright test
-      - name: Show logs if failed
-        if: failure()
-        run: |
-          echo "Next.js logs:"
-          cat .next/server/logs/*.log || true
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
