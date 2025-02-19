@@ -9,6 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       EDGE_STORE_ACCESS_KEY: ${{ secrets.EDGE_STORE_ACCESS_KEY }}
       EDGE_STORE_SECRET_KEY: ${{ secrets.EDGE_STORE_SECRET_KEY }}
